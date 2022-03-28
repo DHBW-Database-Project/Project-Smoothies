@@ -28,5 +28,6 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v2
       with:
+        context: ./Application
         push: true
         tags: bila9630/dbflask:1.0.${{ github.run_number }}
