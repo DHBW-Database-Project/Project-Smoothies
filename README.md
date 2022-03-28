@@ -1,10 +1,10 @@
 # Project-Smoothies 
-![workflow status](https://github.com/DHBW-Database-Project/Project-Smoothies/actions/workflows/docker-image.yml/badge.svg)
+
 <img src="https://img.shields.io/badge/Python-grey?style=flat-square&logo=Python"/>
 <img src="https://img.shields.io/badge/Postgres-grey?style=flat-square&logo=Postgresql"/>
 <img src="https://img.shields.io/badge/Docker-grey?style=flat-square&logo=Docker"/>
 <img src="https://img.shields.io/badge/Flask-v2.0.1-g?style=flat-square&logo=Flask"/>
-
+![workflow status](https://github.com/DHBW-Database-Project/Project-Smoothies/actions/workflows/docker-image.yml/badge.svg)
 
 ## Steps to start application
 to start application:
