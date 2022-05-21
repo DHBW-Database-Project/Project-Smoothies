@@ -8,11 +8,15 @@ from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 CORS(app)
+# set to false when on production
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:projectsmoothies@database:5432/postgres'
 db = SQLAlchemy(app)
 api = Api(app)
 
-# postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<db_container_name>:<POSGRES-DB>
-engine = create_engine('postgresql://postgres:projectsmoothies@database:5432/postgres')
+# postgresql://<POSTGRES_USER>:<POSTGRES_PASSWORD>@<db_container_name>:<port>/<POSTGRES-DB>
+engine = create_engine(
+    'postgresql://postgres:projectsmoothies@database:5432/postgres')
 
 Session = sessionmaker(bind=engine)
 

@@ -3,24 +3,24 @@ version: "3.7"
 services:
   database:
     container_name: database
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=projectsmoothies
     image: postgres:14.2-alpine
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       # wait interval seconds before running check
       # and wait same amount after check completes
       interval: 1s
-      # if check takes longer than timeout, 
-      # check is considered as fail
+      # if check takes longer than timeout, check
+      # is considered as fail
       timeout: 2s
       retries: 5
     ports:
       - 5432:5432
-
     networks:
       - app-network
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=projectsmoothies
+      - POSTGRES_DB=postgres
 
   flask:
     container_name: flask
