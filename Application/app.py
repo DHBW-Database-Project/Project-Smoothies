@@ -24,8 +24,6 @@ session = Session()
 # init db
 sql_statement = open("./db/init.sql", "r").read()
 engine.execute(sql_statement)
-print("all sql statements got executed")
-
 
 # query directly
 class HelloWorld(Resource):

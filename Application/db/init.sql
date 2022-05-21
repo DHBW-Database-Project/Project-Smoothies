@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS product_overview;
+DROP MATERIALIZED VIEW IF EXISTS sum_customer_orders;
 DROP TABLE IF EXISTS supplier CASCADE;
 DROP TABLE IF EXISTS ingredient CASCADE;
 DROP TABLE IF EXISTS product CASCADE;
@@ -167,8 +169,7 @@ FROM
     JOIN category d ON (a.product_id=d.product_id);
 
 
-CREATE materialized view sum_customer_oders
-AS
+CREATE MATERIALIZED VIEW sum_customer_orders AS
 SELECT
     distinct b.customer_id,
     b.fname,
