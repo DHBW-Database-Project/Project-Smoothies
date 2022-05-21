@@ -13,8 +13,8 @@ RUN pip install -r requirements.txt
 
 # copy the content into the working dir
 COPY . /Application/
-# get all updates image
-RUN apt-get -y update
+# use apt-get to get update
+# RUN apt-get -y update
 
 # define the command to start the container
 CMD [ "python", "app.py" ]
