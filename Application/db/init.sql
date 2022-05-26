@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS order_details CASCADE;
 CREATE TABLE supplier (
     supplier_id VARCHAR(8) NOT NULL,
     supplier_name VARCHAR(30) NOT NULL,
-    category VARCHAR(1) NOT NULL,
+    category VARCHAR(30) NOT NULL,
     street_name  VARCHAR(30) NOT NULL,
     zip_code INT NOT NULL,
     city  VARCHAR(25) NOT NULL,	

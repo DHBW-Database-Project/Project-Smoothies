@@ -3,4 +3,12 @@ const nextConfig = {
   reactStrictMode: true,
 }
 
-module.exports = nextConfig
+const env = {
+  SUPPLIER_URL: "http://localhost:5001/supplier",
+  SUPPLIER_URL_TEST: "http://localhost:8001"
+}
+
+module.exports = {
+  nextConfig,
+  env
+}

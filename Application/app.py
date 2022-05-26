@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from query import getAllSupplier
@@ -35,11 +35,36 @@ class HelloWorld(Resource):
 api.add_resource(HelloWorld, "/")
 
 
-# move query to another func
+supplier_post_args = reqparse.RequestParser()
+supplier_post_args.add_argument(
+    "supplierName", type=str, help="Name is required", required=True)
+supplier_post_args.add_argument(
+    "supplierCategory", type=str, help="Category is required", required=True)
+supplier_post_args.add_argument(
+    "supplierStreet", type=str, help="street is required", required=True)
+supplier_post_args.add_argument(
+    "supplierZipcode", type=int, help="zipcode is required", required=True)
+supplier_post_args.add_argument(
+    "supplierCity", type=str, help="city is required", required=True)
+
+
 class Supplier(Resource):
     def get(self):
         supplier = getAllSupplier(engine)
         return jsonify(supplier)
+
+    def post(self):
+        args = supplier_post_args.parse_args()
+        # addSupplier = engine.execute(f"\
+        #     INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)\
+        #         VALUES ({args['supplierName']}, {args['supplierCategory']}, {args['supplierStreet']}, \
+        #             {args['supplierZipcode']}, {args['supplierCity']})")
+        addSupplier = engine.execute(f"\
+            INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)\
+                VALUES (%s, %s, %s, %s, %s)", (args["supplierName"], args["supplierCategory"],
+                                               args["supplierStreet"], args["supplierZipcode"], args["supplierCity"]))
+        return {"result": args}
+
 
 api.add_resource(Supplier, "/supplier")
 
