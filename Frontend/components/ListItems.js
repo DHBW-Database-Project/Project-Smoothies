@@ -8,13 +8,19 @@ import AgricultureIcon from '@mui/icons-material/Agriculture';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import WineBarIcon from '@mui/icons-material/WineBar';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { PageNameContext } from "../contexts/PagenameContext";
 
 const ListItems = () => {
+    const { setPageName } = useContext(PageNameContext)
+
     const router = useRouter()
     const switchPage = (pageName) => {
         if (pageName === "home") {
+            setPageName("dashboard")
             router.replace("/")
         } else {
+            setPageName(pageName)
             router.replace(pageName)
         }
     }

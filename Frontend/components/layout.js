@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
@@ -12,6 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from './ListItems';
+import { PageNameContext } from "../contexts/PagenameContext";
 
 const drawerWidth = 240;
 
@@ -66,6 +67,7 @@ const Layout = ({ children }) => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
+    const { pageName } = useContext(PageNameContext)
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -97,7 +99,7 @@ const Layout = ({ children }) => {
                             sx={{ flexGrow: 1 }}
                         >
                             {/* important replace this later */}
-                            Dashboard
+                            {pageName}
                         </Typography>
                     </Toolbar>
                 </AppBar>
