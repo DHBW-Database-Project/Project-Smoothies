@@ -39,7 +39,7 @@ api.add_resource(HelloWorld, "/")
 class Supplier(Resource):
     def get(self):
         supplier = getAllSupplier(engine)
-        return jsonify({"result": supplier})
+        return jsonify(supplier)
 
 api.add_resource(Supplier, "/supplier")
 
