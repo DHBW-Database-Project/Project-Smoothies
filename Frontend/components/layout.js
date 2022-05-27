@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from './ListItems';
-import { PageNameContext } from "../contexts/PagenameContext";
+import { PageContext } from "../contexts/PageContext";
 
 const drawerWidth = 240;
 
@@ -67,7 +67,7 @@ const Layout = ({ children }) => {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const { pageName } = useContext(PageNameContext)
+    const { pageName } = useContext(PageContext)
 
     return (
         <ThemeProvider theme={mdTheme}>

@@ -1,9 +1,9 @@
 import '../styles/globals.css'
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Layout from '../components/layout';
-import PageNameContextProvider from '../contexts/PagenameContext';
 import { useState } from 'react';
 import { ReactQueryDevtools } from 'react-query/devtools'
+import PageContextProvider from '../contexts/PageContext';
 import DataContextProvider from '../contexts/DataContext';
 
 function MyApp({ Component, pageProps }) {
@@ -11,13 +11,13 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <PageNameContextProvider>
+        <PageContextProvider>
           <DataContextProvider>
             <Layout>
               <Component {...pageProps} />
             </Layout>
           </DataContextProvider>
-        </PageNameContextProvider>
+        </PageContextProvider>
       </Hydrate>
       {/* remove react query dev tools later */}
       <ReactQueryDevtools initialIsOpen={false} />
