@@ -27,39 +27,37 @@ const SuppliersTable = () => {
     return (
         <>
             <Title>Suppliers</Title>
-            <Table size="small">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Street</TableCell>
-                        <TableCell>Zip code</TableCell>
-                        <TableCell>City</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {!isSSR && status === 'loading' && (
-                        <Typography>Loading data</Typography>
-                    )}
+            {!isSSR && status === 'loading' && (
+                <Typography>Loading data...</Typography>
+            )}
+            {!isSSR && status === 'error' && (
+                <Typography>Error fetching data</Typography>
+            )}
 
-                    {!isSSR && status === 'error' && (
-                        <Typography>Error fetching data</Typography>
-                    )}
-
-                    {!isSSR && status === "success" && (
-                        data.map(supplier =>
-                            <TableRow key={supplier[0]}>
-                                <TableCell>{supplier[1]}</TableCell>
-                                <TableCell>{supplier[2]}</TableCell>
-                                <TableCell>{supplier[3]}</TableCell>
-                                <TableCell>{supplier[4]}</TableCell>
-                                <TableCell>{supplier[5]}</TableCell>
+            {!isSSR && status === "success" && (
+                <Table size="small">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Name</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Street</TableCell>
+                            <TableCell>Zip code</TableCell>
+                            <TableCell>City</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data.map(supplier => (
+                            <TableRow key={supplier["id"]}>
+                                <TableCell>{supplier["name"]}</TableCell>
+                                <TableCell>{supplier["category"]}</TableCell>
+                                <TableCell>{supplier["street"]}</TableCell>
+                                <TableCell>{supplier["zipcode"]}</TableCell>
+                                <TableCell>{supplier["city"]}</TableCell>
                             </TableRow>
-                        )
-                    )}
-                </TableBody>
-
-            </Table>
+                        ))}
+                    </TableBody>
+                </Table>
+            )}
         </>
     )
 }

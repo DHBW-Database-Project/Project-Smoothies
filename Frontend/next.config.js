@@ -5,7 +5,8 @@ const nextConfig = {
 
 const env = {
   SUPPLIER_URL: "http://localhost:5001/supplier",
-  SUPPLIER_URL_TEST: "http://localhost:8001"
+  SUPPLIER_URL_TEST: "http://localhost:8001",
+  TEST_URL: "http://localhost:5001/"
 }
 
 module.exports = {

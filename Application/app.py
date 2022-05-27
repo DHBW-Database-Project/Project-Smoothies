@@ -26,11 +26,20 @@ sql_statement = open("./db/init.sql", "r").read()
 engine.execute(sql_statement)
 
 # query directly
+
+
 class HelloWorld(Resource):
     def get(self):
         supplier = engine.execute("SELECT * FROM supplier")
-        result = [list(row) for row in supplier]
-        return jsonify({"result": result})
+        # result = [list(row) for row in supplier]
+        result = []
+        for row in supplier:
+            newRow = {"id": row[0], "name": row[1], "category": row[2],
+                      "street": row[3], "zipcode": row[4], "city": row[5]}
+            result.append(newRow)
+
+        return jsonify(result)
+
 
 api.add_resource(HelloWorld, "/")
 
