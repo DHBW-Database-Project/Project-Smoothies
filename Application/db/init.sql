@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS orders CASCADE;
 DROP TABLE IF EXISTS order_details CASCADE;
 
 CREATE TABLE supplier (
-    supplier_id VARCHAR(8) NOT NULL,
+    supplier_id serial UNIQUE NOT NULL,
     supplier_name VARCHAR(30) NOT NULL,
     category VARCHAR(30) NOT NULL,
     street_name  VARCHAR(30) NOT NULL,
@@ -20,11 +20,11 @@ CREATE TABLE supplier (
 );
 
 CREATE TABLE ingredient (
-    ingredient_id VARCHAR (5) NOT NULL,
+    ingredient_id serial UNIQUE NOT NULL,
     ingredient_name VARCHAR(20) NOT NULL,
     quantity INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    supplier_id VARCHAR(8) NOT NULL,
+    supplier_id int,
     PRIMARY KEY(ingredient_id),
     FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id)
 );
@@ -48,7 +48,7 @@ CREATE TABLE category (
 
 CREATE TABLE recipe (
     product_id VARCHAR(5) NOT NULL,
-    ingredient_id VARCHAR(5) NOT NULL,
+    ingredient_id int,
     quantity INT NOT NULL,
     PRIMARY KEY( product_id, ingredient_id),
     FOREIGN KEY(ingredient_id) REFERENCES ingredient(ingredient_id),
