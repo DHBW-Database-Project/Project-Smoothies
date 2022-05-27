@@ -20,7 +20,7 @@ const Suppliers = () => {
                                 p: 2,
                                 display: "flex",
                                 flexDirection: "column",
-                                height: 320,
+                                height: 340,
                             }}
                         >
                             <SuppliersForm />

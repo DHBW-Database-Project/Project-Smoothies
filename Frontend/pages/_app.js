@@ -3,8 +3,8 @@ import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Layout from '../components/layout';
 import PageNameContextProvider from '../contexts/PagenameContext';
 import { useState } from 'react';
-
-// const queryClient = new QueryClient()
+import { ReactQueryDevtools } from 'react-query/devtools'
+import DataContextProvider from '../contexts/DataContext';
 
 function MyApp({ Component, pageProps }) {
   const [queryClient] = useState(() => new QueryClient())
@@ -12,11 +12,15 @@ function MyApp({ Component, pageProps }) {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <PageNameContextProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <DataContextProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </DataContextProvider>
         </PageNameContextProvider>
       </Hydrate>
+      {/* remove react query dev tools later */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )
 }

@@ -5,18 +5,12 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useQuery } from 'react-query'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-
-const fetchSuppliers = async () => {
-    const res = await fetch(process.env.SUPPLIER_URL)
-    return res.json()
-}
+import { DataContext } from "../contexts/DataContext";
 
 const SuppliersTable = () => {
-    const { data, status } = useQuery("supplier", () => fetchSuppliers(), {
-        keepPreviousData: true
-    })
+    const {supplierData, supplierStatus} = useContext(DataContext)
 
     // this will switch back to client side rendering
     const [isSSR, setIsSSR] = useState(true);
@@ -27,17 +21,18 @@ const SuppliersTable = () => {
     return (
         <>
             <Title>Suppliers</Title>
-            {!isSSR && status === 'loading' && (
+            {!isSSR && supplierStatus === 'loading' && (
                 <Typography>Loading data...</Typography>
             )}
-            {!isSSR && status === 'error' && (
+            {!isSSR && supplierStatus === 'error' && (
                 <Typography>Error fetching data</Typography>
             )}
 
-            {!isSSR && status === "success" && (
+            {!isSSR && supplierStatus === "success" && (
                 <Table size="small">
                     <TableHead>
                         <TableRow>
+                            <TableCell>ID</TableCell>
                             <TableCell>Name</TableCell>
                             <TableCell>Category</TableCell>
                             <TableCell>Street</TableCell>
@@ -46,8 +41,9 @@ const SuppliersTable = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data.map(supplier => (
+                        {supplierData.map(supplier => (
                             <TableRow key={supplier["id"]}>
+                                <TableCell>{supplier["id"]}</TableCell>
                                 <TableCell>{supplier["name"]}</TableCell>
                                 <TableCell>{supplier["category"]}</TableCell>
                                 <TableCell>{supplier["street"]}</TableCell>

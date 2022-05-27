@@ -1,9 +1,12 @@
 import Title from "./Title"
-import { Button, Grid, TextField } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { DataContext } from "../contexts/DataContext";
 
 const SuppliersForm = () => {
+    const { refetchSupplier } = useContext(DataContext)
+
     const [name, setName] = useState("")
     const [category, setCategory] = useState("")
     const [street, setStreet] = useState("")
@@ -15,6 +18,8 @@ const SuppliersForm = () => {
     const [streetError, setStreetError] = useState(false)
     const [zipcodeError, setZipcodeError] = useState(false)
     const [cityError, setCityError] = useState(false)
+
+    const [errorMessage, setErrorMessage] = useState("");
 
     const options = {
         method: "POST",
@@ -33,6 +38,7 @@ const SuppliersForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setErrorMessage("")
         setNameError(false)
         setCategoryError(false)
         setStreetError(false)
@@ -61,8 +67,17 @@ const SuppliersForm = () => {
 
         if (name && category && street && zipcode && city) {
             fetch(process.env.SUPPLIER_URL, options)
+                // remove console log later!
                 .then(data => {
-                    console.log(data)
+                    if (data.status == "400") {
+                        setErrorMessage(data.statusText)
+                        console.log(data)
+                    }
+                    refetchSupplier()
+                })
+                .catch(error => {
+                    console.log(error)
+                    setErrorMessage("couldn't process request!")
                 })
         }
     }
@@ -134,6 +149,9 @@ const SuppliersForm = () => {
                             >
                                 Add supplier
                             </Button>
+                            <Typography mt={2}>
+                                {errorMessage}
+                            </Typography>
                         </Box>
                     </Grid>
                 </Grid>
