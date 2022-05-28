@@ -7,6 +7,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import WineBarIcon from '@mui/icons-material/WineBar';
+import CategoryIcon from '@mui/icons-material/Category';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { PageContext } from "../contexts/PageContext";
@@ -62,6 +63,12 @@ const ListItems = () => {
                     <InventoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Ingredients" />
+            </ListItemButton>
+            <ListItemButton onClick={() => switchPage("category")}>
+                <ListItemIcon>
+                    <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Category" />
             </ListItemButton>
         </>
     )

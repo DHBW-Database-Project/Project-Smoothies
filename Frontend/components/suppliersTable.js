@@ -1,16 +1,16 @@
-import Title from "./Title"
+import Title from "./Title";
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useQuery } from 'react-query'
 import { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { DataContext } from "../contexts/DataContext";
+import DeleteButton from "./DeleteButton";
 
 const SuppliersTable = () => {
-    const {supplierData, supplierStatus} = useContext(DataContext)
+    const { supplierData, supplierStatus } = useContext(DataContext)
 
     // this will switch back to client side rendering
     const [isSSR, setIsSSR] = useState(true);
@@ -21,6 +21,7 @@ const SuppliersTable = () => {
     return (
         <>
             <Title>Suppliers</Title>
+
             {!isSSR && supplierStatus === 'loading' && (
                 <Typography>Loading data...</Typography>
             )}
@@ -38,6 +39,7 @@ const SuppliersTable = () => {
                             <TableCell>Street</TableCell>
                             <TableCell>Zip code</TableCell>
                             <TableCell>City</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -49,6 +51,9 @@ const SuppliersTable = () => {
                                 <TableCell>{supplier["street"]}</TableCell>
                                 <TableCell>{supplier["zipcode"]}</TableCell>
                                 <TableCell>{supplier["city"]}</TableCell>
+                                <TableCell>
+                                    <DeleteButton tableName={"supplier"} rowId={supplier["id"]} />
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

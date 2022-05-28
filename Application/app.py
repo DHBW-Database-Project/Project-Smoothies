@@ -1,3 +1,4 @@
+from ast import arg
 from flask import Flask, jsonify
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
@@ -5,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from query import getAllSuppliers, getAllIngredients
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.exc import SQLAlchemyError
 
 app = Flask(__name__)
 CORS(app)
@@ -24,6 +26,7 @@ session = Session()
 # init db
 sql_statement = open("./db/init.sql", "r").read()
 engine.execute(sql_statement)
+
 
 # test endpoint
 class HelloWorld(Resource):
@@ -48,11 +51,15 @@ supplier_post_args.add_argument(
 supplier_post_args.add_argument(
     "supplierCategory", type=str, help="Category is required", required=True)
 supplier_post_args.add_argument(
-    "supplierStreet", type=str, help="street is required", required=True)
+    "supplierStreet", type=str, help="Street is required", required=True)
 supplier_post_args.add_argument(
-    "supplierZipcode", type=int, help="zipcode is required", required=True)
+    "supplierZipcode", type=int, help="Zipcode is required", required=True)
 supplier_post_args.add_argument(
-    "supplierCity", type=str, help="city is required", required=True)
+    "supplierCity", type=str, help="City is required", required=True)
+
+supplier_delete_args = reqparse.RequestParser()
+supplier_delete_args.add_argument(
+    "rowId", type=int, help="Row ID is required", required=True)
 
 class Supplier(Resource):
     def get(self):
@@ -61,19 +68,49 @@ class Supplier(Resource):
 
     def post(self):
         args = supplier_post_args.parse_args()
-        addSupplier = engine.execute(f"\
+        addSupplier = engine.execute("\
             INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)\
                 VALUES (%s, %s, %s, %s, %s)", (args["supplierName"], args["supplierCategory"],
                                                args["supplierStreet"], args["supplierZipcode"], args["supplierCity"]))
         return {"result": args}
 
+    def delete(self):
+        args = supplier_delete_args.parse_args()
+        errorMessage = "row got deleted"
+        try:
+            deleteSupplier = engine.execute("\
+                DELETE FROM supplier WHERE supplier_id = %s;", (args["rowId"]))
+        except SQLAlchemyError as e:
+            errorMessage = str(e.__dict__["orig"])
+            
+        return {"result": errorMessage}
+
 api.add_resource(Supplier, "/supplier")
 
 # INGREDIENT
+ingredient_post_args = reqparse.RequestParser()
+ingredient_post_args.add_argument(
+    "ingredientName", type=str, help="Name is required", required=True)
+ingredient_post_args.add_argument(
+    "ingredientQuantity", type=str, help="Quantity is required", required=True)
+ingredient_post_args.add_argument(
+    "ingredientPrice", type=str, help="Price is required", required=True)
+ingredient_post_args.add_argument(
+    "supplierId", type=int, help="supplierId is required", required=True)
+
+
 class Ingredient(Resource):
     def get(self):
         ingredients = getAllIngredients(engine)
         return jsonify(ingredients)
+
+    def post(self):
+        args = ingredient_post_args.parse_args()
+        addIngredient = engine.execute(f"\
+            INSERT INTO ingredient (ingredient_name, quantity, price, supplier_id)\
+                VALUES (%s, %s, %s, %s)", (args["ingredientName"], args["ingredientQuantity"],
+                                           args["ingredientPrice"], args["supplierId"]))
+        return {"result": args}
 
 api.add_resource(Ingredient, "/ingredient")
 

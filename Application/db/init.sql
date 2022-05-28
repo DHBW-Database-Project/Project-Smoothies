@@ -86,24 +86,25 @@ CREATE TABLE order_details (
 );
 
 
-INSERT INTO supplier (supplier_id, supplier_name, category, street_name, zip_code, city)
+INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)
     VALUES
-    (12345678, 'Franz GmbH', 'x', 'Betastr. 15', 68167, 'Mannheim'),
-    (12345679, 'Edelmann GbmH', 'y', 'Hauptstr. 20', 60308, 'Frankfurt am Main'),
-    (12345677, 'Extro AG', 'z', 'Gartenstr. 1', 69115, 'Heidelberg');
+    ('Franz GmbH', 'x', 'Betastr. 15', 68167, 'Mannheim'),
+    ('Edelmann GbmH', 'y', 'Hauptstr. 20', 60308, 'Frankfurt am Main'),
+    ('Extro AG', 'z', 'Gartenstr. 1', 69115, 'Heidelberg'),
+    ('Tower AG', 'z', 'Klarstr. 1', 24568, 'Bielefeld');
 
-INSERT INTO ingredient (ingredient_id, ingredient_name, quantity, price, supplier_id)
+INSERT INTO ingredient (ingredient_name, quantity, price, supplier_id)
     VALUES
-    (80001, 'Apple', 100, 0.2,  12345678),
-    (80002, 'Banana',100, 0.3, 12345678),
-    (80003, 'Kiwi', 100, 0.4,  12345678),
-    (80004, 'Spinat',80, 0.3, 12345679),
-    (80005, 'Mint', 100, 0.12,  12345677),
-    (80006, 'Grapes',80, 0.3, 12345679),
-    (80007, 'Orange', 100, 0.2,  12345679),
-    (80008, 'Mango',80, 0.5, 12345679),
-    (80009, 'Lemon',80, 0.3, 12345679),
-    (80010, 'Carrot', 100, 0.30,  12345677);
+    ('Apple', 100, 0.2,  1),
+    ('Banana',100, 0.3, 1),
+    ('Kiwi', 100, 0.4,  1),
+    ('Spinat',80, 0.3, 2),
+    ('Mint', 100, 0.12,  3),
+    ('Grapes',80, 0.3, 2),
+    ('Orange', 100, 0.2,  2),
+    ('Mango',80, 0.5, 2),
+    ('Lemon',80, 0.3, 2),
+    ('Carrot', 100, 0.30,  3);
 
 INSERT INTO product (product_id, product_name, quantity, selling_price)
     VALUES
@@ -121,14 +122,14 @@ INSERT INTO category (category_id, category_name, description, product_id)
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
-    (15001, 80001,2),
-    (15001, 80002,1),
-    (15001, 80010,2),
-    (15001, 80005,1),
-    (15002, 80008,2),
-    (15002, 80005,1),
-    (15003, 80003,4),
-    (15003, 80006,1);
+    (15001, 1,2),
+    (15001, 2,1),
+    (15001, 10,2),
+    (15001, 5,1),
+    (15002, 8,2),
+    (15002, 5,1),
+    (15003, 3,4),
+    (15003, 6,1);
 
 INSERT INTO customer (customer_id, fname, lname, streetname, zip_code, city)
     VALUES
