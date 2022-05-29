@@ -10,7 +10,9 @@ import { DataContext } from "../contexts/DataContext";
 import DeleteButton from "./DeleteButton";
 
 const SuppliersTable = () => {
-    const { supplierData, supplierStatus } = useContext(DataContext)
+    const { supplierData, supplierStatus, refetchSupplier } = useContext(DataContext)
+    const [errorMessage, setErrorMessage] = useState("");
+
 
     // this will switch back to client side rendering
     const [isSSR, setIsSSR] = useState(true);
@@ -30,34 +32,42 @@ const SuppliersTable = () => {
             )}
 
             {!isSSR && supplierStatus === "success" && (
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Name</TableCell>
-                            <TableCell>Category</TableCell>
-                            <TableCell>Street</TableCell>
-                            <TableCell>Zip code</TableCell>
-                            <TableCell>City</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {supplierData.map(supplier => (
-                            <TableRow key={supplier["id"]}>
-                                <TableCell>{supplier["id"]}</TableCell>
-                                <TableCell>{supplier["name"]}</TableCell>
-                                <TableCell>{supplier["category"]}</TableCell>
-                                <TableCell>{supplier["street"]}</TableCell>
-                                <TableCell>{supplier["zipcode"]}</TableCell>
-                                <TableCell>{supplier["city"]}</TableCell>
-                                <TableCell>
-                                    <DeleteButton tableName={"supplier"} rowId={supplier["id"]} />
-                                </TableCell>
+                <>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Category</TableCell>
+                                <TableCell>Street</TableCell>
+                                <TableCell>Zip code</TableCell>
+                                <TableCell>City</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHead>
+                        <TableBody>
+                            {supplierData.map(supplier => (
+                                <TableRow key={supplier["id"]}>
+                                    <TableCell>{supplier["id"]}</TableCell>
+                                    <TableCell>{supplier["name"]}</TableCell>
+                                    <TableCell>{supplier["category"]}</TableCell>
+                                    <TableCell>{supplier["street"]}</TableCell>
+                                    <TableCell>{supplier["zipcode"]}</TableCell>
+                                    <TableCell>{supplier["city"]}</TableCell>
+                                    <TableCell>
+                                        <DeleteButton
+                                            endpointUrl={process.env.SUPPLIER_URL}
+                                            rowId={supplier["id"]}
+                                            refetchFunc={refetchSupplier}
+                                            setErrorMessage={setErrorMessage}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <Typography>{errorMessage}</Typography>
+                </>
             )}
         </>
     )

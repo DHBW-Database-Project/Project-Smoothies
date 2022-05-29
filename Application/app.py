@@ -1,5 +1,4 @@
-from ast import arg
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -76,14 +75,14 @@ class Supplier(Resource):
 
     def delete(self):
         args = supplier_delete_args.parse_args()
-        errorMessage = "row got deleted"
         try:
             deleteSupplier = engine.execute("\
                 DELETE FROM supplier WHERE supplier_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
             errorMessage = str(e.__dict__["orig"])
+            abort(400, errorMessage)
             
-        return {"result": errorMessage}
+        return 200
 
 api.add_resource(Supplier, "/supplier")
 

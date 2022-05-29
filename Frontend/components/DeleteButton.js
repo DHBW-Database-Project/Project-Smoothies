@@ -5,7 +5,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 
 
-const DeleteButton = ({ tableName, rowId }) => {
+const DeleteButton = ({ endpointUrl, rowId, refetchFunc, setErrorMessage }) => {
     const options = {
         method: "DELETE",
         headers: {
@@ -17,9 +17,14 @@ const DeleteButton = ({ tableName, rowId }) => {
         })
     }
 
-    const handleDelete = () => {
-        fetch(process.env.SUPPLIER_URL, options)
-        console.log(tableName, rowId)
+    const handleDelete = async () => {
+        setErrorMessage("")
+        const response = await fetch(endpointUrl, options)
+        if (response.status == 400) {
+            let data = await response.json()
+            setErrorMessage(data.message)
+        }
+        refetchFunc()
     }
 
     return (
