@@ -4,7 +4,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 
 
-
+// Delete button for each row
+// endpointUrl is place where to send delete request to
+// rowId to identify row
+// refetchFunc gets trigger after sending request
+// setErrorMessage displays err message when request fails
 const DeleteButton = ({ endpointUrl, rowId, refetchFunc, setErrorMessage }) => {
     const options = {
         method: "DELETE",

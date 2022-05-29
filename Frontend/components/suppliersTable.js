@@ -15,6 +15,7 @@ const SuppliersTable = () => {
 
 
     // this will switch back to client side rendering
+    // this is to evade problem with React v18
     const [isSSR, setIsSSR] = useState(true);
     useEffect(() => {
         setIsSSR(false);

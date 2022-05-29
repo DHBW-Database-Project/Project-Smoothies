@@ -6,16 +6,10 @@ const fetchSuppliers = async () => {
     return res.json()
 }
 
-// const fetchPlanets = async (page) => {
-//     const res = await fetch(process.env.SUPPLIER_URL_TEST)
-//     return res.json()
-// }
 
-
+// THIS IS A TEST PAGE!!!
 const checkapi2 = () => {
     const { data: otherName, status } = useQuery("supplier", fetchSuppliers)
-    // const { data: mock, status: mockStatus } = useQuery("planet", fetchPlanets)
-    console.log(otherName)
 
     return (
         <div>
@@ -32,7 +26,6 @@ const checkapi2 = () => {
             {status === 'success' && (
                 <div>
                     <p>Data rendered successfully</p>
-                    {/* <p>{otherName[0]}</p> */}
                     {otherName.map(supplier => (
                         <React.Fragment key={supplier["id"]}>
                             <p>Supplier Name: {supplier["name"]}</p>

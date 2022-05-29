@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
           </DataContextProvider>
         </PageContextProvider>
       </Hydrate>
-      {/* remove react query dev tools later */}
+      {/* react query dev tools automatically gets removed on prod*/}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

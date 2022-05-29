@@ -62,6 +62,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
+
+// The Layout is responsible for the drawer on left side
 const Layout = ({ children }) => {
     const [open, setOpen] = useState(true);
     const toggleDrawer = () => {

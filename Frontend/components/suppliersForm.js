@@ -13,14 +13,19 @@ const SuppliersForm = () => {
     const [zipcode, setZipcode] = useState("")
     const [city, setCity] = useState("")
 
+
+    // This is to check is field is empty
+    // if empty => set true => make field red
     const [nameError, setNameError] = useState(false)
     const [categoryError, setCategoryError] = useState(false)
     const [streetError, setStreetError] = useState(false)
     const [zipcodeError, setZipcodeError] = useState(false)
     const [cityError, setCityError] = useState(false)
 
+    // display error message when request fails
     const [errorMessage, setErrorMessage] = useState("");
 
+    // body of post request for adding row
     const options = {
         method: "POST",
         headers: {
@@ -36,6 +41,7 @@ const SuppliersForm = () => {
         })
     }
 
+    // handling user input before sending request
     const handleSubmit = async (e) => {
         e.preventDefault()
         setErrorMessage("")
@@ -65,19 +71,15 @@ const SuppliersForm = () => {
             setCityError(true);
         }
 
+        // request is sent after all input are valid
         if (name && category && street && zipcode && city) {
             fetch(process.env.SUPPLIER_URL, options)
-                // remove console log later!
                 .then(data => {
                     if (data.status == "400") {
                         setErrorMessage(data.statusText)
-                        console.log(data)
                     }
+                    // refetch table data after each request
                     refetchSupplier()
-                })
-                .catch(error => {
-                    console.log(error)
-                    setErrorMessage("couldn't process request!")
                 })
         }
     }

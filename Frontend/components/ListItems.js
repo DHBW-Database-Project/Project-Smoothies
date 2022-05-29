@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { PageContext } from "../contexts/PageContext";
 
+// All the pages on the drawer are listed here
 const ListItems = () => {
     const { setPageName } = useContext(PageContext)
 
