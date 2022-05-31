@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ListItems from './ListItems';
 import { PageContext } from "../contexts/PageContext";
+import SecondaryListItems from "./SecondaryListItems";
 
 const drawerWidth = 240;
 
@@ -121,6 +122,8 @@ const Layout = ({ children }) => {
                     <Divider />
                     <List component="nav">
                         <ListItems />
+                        <Divider sx={{ my: 1 }} />
+                        <SecondaryListItems />
                     </List>
                 </Drawer>
                 <Box

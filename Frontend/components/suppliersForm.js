@@ -85,7 +85,7 @@ const SuppliersForm = () => {
     }
     return (
         <>
-            <Title>Add supplier</Title>
+            <Title>Add supplier hallo</Title>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
