@@ -228,7 +228,7 @@ class Category(Resource):
         args = category_post_args.parse_args()
         addCategory = engine.execute("\
             INSERT INTO category (category_id, category_name, description, product_id)\
-                VALUES (%s, %s, %s)", (args["categoryName"], args["categoryDescription"],args["productId"]))
+                VALUES (%s, %s, %s)", (args["categoryName"], args["categoryDescription"], args["productId"]))
         return {"result": args}
 
     def delete(self):
@@ -266,7 +266,8 @@ class Order(Resource):
         args = order_post_args.parse_args()
         addOrder = engine.execute("\
             INSERT INTO order (order_id, customer_id, customer_name, order_date, ship_to, invoice_amount)\
-                VALUES (%s, %s, %s, %s, %s)", (args["customerId"], args["customerName"],args["orderDate"], args["shipTo"],args["invoiceAmount"]))
+                VALUES (%s, %s, %s, %s, %s)", (args["customerId"], args["customerName"],
+                        args["orderDate"], args["shipTo"],args["invoiceAmount"]))
         return {"result": args}
 
 
@@ -290,7 +291,8 @@ class OrderDetail(Resource):
         args = orderDetail_post_args.parse_args()
         addOrderDetail = engine.execute("\
             INSERT INTO order (orders_id, product_id, quantity, price)\
-                VALUES (%s, %s, %s, %s)", (args["orderId"], args["productId"],args["quantity"], args["price"]))
+                VALUES (%s, %s, %s, %s)", (args["orderId"], args["productId"],
+                            args["quantity"], args["price"]))
         return {"result": args}
 
 
