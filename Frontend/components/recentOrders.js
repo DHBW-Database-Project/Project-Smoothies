@@ -52,7 +52,7 @@ function preventDefault(event) {
     event.preventDefault();
 }
 
-const OrdersTable = () => {
+const RecentOrdersTable = () => {
     return (
         <>
             <Title>Recent Orders</Title>
@@ -85,4 +85,4 @@ const OrdersTable = () => {
     )
 }
 
-export default OrdersTable
+export default RecentOrdersTable

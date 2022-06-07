@@ -1,26 +1,27 @@
-import Title from "./Title"
+import Title from "../Title"
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useContext, useState } from "react";
-import { DataContext } from "../contexts/DataContext";
+import { DataContext } from "../../contexts/DataContext";
 
-const SuppliersForm = () => {
-    const { refetchSupplier } = useContext(DataContext)
+                  
+const IngredientForm = () => {
+    const { refetchIngredient } = useContext(DataContext)
 
     const [name, setName] = useState("")
-    const [category, setCategory] = useState("")
-    const [street, setStreet] = useState("")
-    const [zipcode, setZipcode] = useState("")
-    const [city, setCity] = useState("")
+    const [quantity, setQuantity] = useState("")
+    const [price, setPrice] = useState("")
+    const [supplierID, setSupplierID] = useState("")
+
 
 
     // This is to check is field is empty
     // if empty => set true => make field red
     const [nameError, setNameError] = useState(false)
-    const [categoryError, setCategoryError] = useState(false)
-    const [streetError, setStreetError] = useState(false)
-    const [zipcodeError, setZipcodeError] = useState(false)
-    const [cityError, setCityError] = useState(false)
+    const [quantityError, setQuantityError] = useState(false)
+    const [priceError, setPriceError] = useState(false)
+    const [supplierIDError, setSupplierIDError] = useState(false)
+
 
     // display error message when request fails
     const [errorMessage, setErrorMessage] = useState("");
@@ -33,11 +34,10 @@ const SuppliersForm = () => {
             "Content-Type": "application/json;charset=UTF-8",
         },
         body: JSON.stringify({
-            supplierName: name,
-            supplierCategory: category,
-            supplierStreet: street,
-            supplierZipcode: zipcode,
-            supplierCity: city
+            ingredientName: name,
+            ingredientQuantity: quantity,
+            ingredientPrice: price,
+            supplierId: supplierID
         })
     }
 
@@ -46,46 +46,41 @@ const SuppliersForm = () => {
         e.preventDefault()
         setErrorMessage("")
         setNameError(false)
-        setCategoryError(false)
-        setStreetError(false)
-        setZipcodeError(false)
-        setCityError(false)
+        setQuantityError(false)
+        setPriceError(false)
+        setSupplierIDError(false)
 
         if (name === "") {
             setNameError(true);
         }
 
-        if (category === "") {
-            setCategoryError(true);
+        if (quantity === "") {
+            setQuantityError(true);
         }
 
-        if (street === "") {
-            setStreetError(true);
+        if (price === "") {
+            setPriceError(true);
         }
 
-        if (zipcode === "") {
-            setZipcodeError(true);
-        }
-
-        if (city === "") {
-            setCityError(true);
+        if (supplierID === "") {
+            setSupplierIDError(true);
         }
 
         // request is sent after all input are valid
-        if (name && category && street && zipcode && city) {
-            fetch(process.env.SUPPLIER_URL, options)
+        if (name && quantity && price && supplierID) {
+            fetch(process.env.INGREDIENT_URL, options)
                 .then(data => {
                     if (data.status == "400") {
                         setErrorMessage(data.statusText)
                     }
                     // refetch table data after each request
-                    refetchSupplier()
+                    refetchIngredient()
                 })
         }
     }
     return (
         <>
-            <Title>Add supplier hallo</Title>
+            <Title>Add Ingredient </Title>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                     <Grid item xs={4}>
@@ -101,46 +96,35 @@ const SuppliersForm = () => {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setCategory(e.target.value)}
-                            label="Category"
+                            onChange={(e) => setQuantity(e.target.value)}
+                            label="Quantity"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
-                            error={categoryError}
+                            error={quantityError}
                         />
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setStreet(e.target.value)}
-                            label="Street"
+                            onChange={(e) => setPrice(e.target.value)}
+                            label="Price"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
-                            error={streetError}
+                            error={priceError}
                         />
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setZipcode(e.target.value)}
-                            label="Zipcode"
+                            onChange={(e) => setSupplierID(e.target.value)}
+                            label="Supplier ID"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
-                            error={zipcodeError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setCity(e.target.value)}
-                            label="City"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={cityError}
+                            error={supplierIDError}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -149,7 +133,7 @@ const SuppliersForm = () => {
                                 type="submit"
                                 variant="contained"
                             >
-                                Add supplier
+                                Add Ingredient
                             </Button>
                             <Typography mt={2}>
                                 {errorMessage}
@@ -162,4 +146,4 @@ const SuppliersForm = () => {
     )
 }
 
-export default SuppliersForm
+export default IngredientForm

@@ -4,7 +4,7 @@ import Deposits from '../components/Deposits';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import OrdersTable from '../components/ordersTable';
+import RecentOrdersTable from '../components/recentOrders';
 
 export default function Home() {
   return (
@@ -45,7 +45,7 @@ export default function Home() {
           {/* Recent Orders */}
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-              <OrdersTable />
+              <RecentOrdersTable />
             </Paper>
           </Grid>
         </Grid>

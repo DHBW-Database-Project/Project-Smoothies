@@ -2,8 +2,8 @@ import { Paper } from '@mui/material'
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Head from 'next/head'
-import SuppliersForm from '../components/suppliersForm'
-import SuppliersTable from '../components/suppliersTable'
+import SuppliersForm from '../components/suppliers/suppliersForm'
+import SuppliersTable from '../components/suppliers/suppliersTable'
 
 
 const Suppliers = () => {

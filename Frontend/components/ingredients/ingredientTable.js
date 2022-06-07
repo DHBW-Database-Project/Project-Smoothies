@@ -1,4 +1,4 @@
-import Title from "./Title";
+import Title from "../Title";
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,11 +6,11 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
-import { DataContext } from "../contexts/DataContext";
-import DeleteButton from "./DeleteButton";
+import { DataContext } from "../../contexts/DataContext";
+import DeleteButton from "../DeleteButton";
 
-const SuppliersTable = () => {
-    const { supplierData, supplierStatus, refetchSupplier } = useContext(DataContext)
+const IngredientTable = () => {
+    const { ingredientData, ingredientStatus, refetchIngredient } = useContext(DataContext)
     const [errorMessage, setErrorMessage] = useState("");
 
 
@@ -23,43 +23,40 @@ const SuppliersTable = () => {
 
     return (
         <>
-            <Title>Suppliers</Title>
+            <Title>Ingredient</Title>
 
-            {!isSSR && supplierStatus === 'loading' && (
+            {!isSSR && ingredientStatus === 'loading' && (
                 <Typography>Loading data...</Typography>
             )}
-            {!isSSR && supplierStatus === 'error' && (
+            {!isSSR && ingredientStatus === 'error' && (
                 <Typography>Error fetching data</Typography>
             )}
 
-            {!isSSR && supplierStatus === "success" && (
+            {!isSSR && ingredientStatus === "success" && (
                 <>
                     <Table size="small">
                         <TableHead>
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Name</TableCell>
-                                <TableCell>Category</TableCell>
-                                <TableCell>Street</TableCell>
-                                <TableCell>Zip code</TableCell>
-                                <TableCell>City</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell>Price</TableCell>
+                                <TableCell>Supplier ID</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {supplierData.map(supplier => (
-                                <TableRow key={supplier["id"]}>
-                                    <TableCell>{supplier["id"]}</TableCell>
-                                    <TableCell>{supplier["name"]}</TableCell>
-                                    <TableCell>{supplier["category"]}</TableCell>
-                                    <TableCell>{supplier["street"]}</TableCell>
-                                    <TableCell>{supplier["zipcode"]}</TableCell>
-                                    <TableCell>{supplier["city"]}</TableCell>
+                            {ingredientData.map(ingredient => (
+                                <TableRow key={ingredient["id"]}>
+                                    <TableCell>{ingredient["id"]}</TableCell>
+                                    <TableCell>{ingredient["name"]}</TableCell>
+                                    <TableCell>{ingredient["quantity"]}</TableCell>
+                                    <TableCell align="right">{`$${ingredient["price"]}`}</TableCell>
+                                    <TableCell>{ingredient["supplierId"]}</TableCell>
                                     <TableCell>
                                         <DeleteButton
-                                            endpointUrl={process.env.SUPPLIER_URL}
-                                            rowId={supplier["id"]}
-                                            refetchFunc={refetchSupplier}
+                                            endpointUrl={process.env.INGREDIENT_URL}
+                                            rowId={ingredient["id"]}
+                                            refetchFunc={refetchIngredient}
                                             setErrorMessage={setErrorMessage}
                                         />
                                     </TableCell>
@@ -74,4 +71,4 @@ const SuppliersTable = () => {
     )
 }
 
-export default SuppliersTable
+export default IngredientTable
