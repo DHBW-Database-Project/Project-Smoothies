@@ -19,7 +19,7 @@ const ListItems = () => {
     const router = useRouter()
     const switchPage = (pageName) => {
         if (pageName === "home") {
-            setPageName("dashboard")
+            setPageName("Dashboard")
             router.replace("/")
         } else {
             setPageName(pageName)
@@ -35,37 +35,37 @@ const ListItems = () => {
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("orders")}>
+            <ListItemButton onClick={() => switchPage("Orders")}>
                 <ListItemIcon>
                     <ShoppingCartIcon />
                 </ListItemIcon>
                 <ListItemText primary="Orders" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("customers")}>
+            <ListItemButton onClick={() => switchPage("Customers")}>
                 <ListItemIcon>
                     <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="Customers" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("products")}>
+            <ListItemButton onClick={() => switchPage("Products")}>
                 <ListItemIcon>
                     <WineBarIcon />
                 </ListItemIcon>
                 <ListItemText primary="Products" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("suppliers")}>
+            <ListItemButton onClick={() => switchPage("Suppliers")}>
                 <ListItemIcon>
                     <AgricultureIcon />
                 </ListItemIcon>
                 <ListItemText primary="Suppliers" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("ingredients")}>
+            <ListItemButton onClick={() => switchPage("Ingredients")}>
                 <ListItemIcon>
                     <InventoryIcon />
                 </ListItemIcon>
                 <ListItemText primary="Ingredients" />
             </ListItemButton>
-            <ListItemButton onClick={() => switchPage("category")}>
+            <ListItemButton onClick={() => switchPage("Category")}>
                 <ListItemIcon>
                     <CategoryIcon />
                 </ListItemIcon>
