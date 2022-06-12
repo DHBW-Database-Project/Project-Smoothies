@@ -1,5 +1,4 @@
 import Head from 'next/head'
-import Chart from '../components/Chart';
 import Deposits from '../components/Deposits';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -26,7 +25,6 @@ export default function Home() {
                 height: 240,
               }}
             >
-              <Chart />
             </Paper>
           </Grid>
           {/* Recent Deposits */}

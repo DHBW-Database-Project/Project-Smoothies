@@ -13,7 +13,7 @@ CREATE TABLE supplier (
     supplier_id serial UNIQUE NOT NULL,
     supplier_name VARCHAR(30) NOT NULL,
     category VARCHAR(30) NOT NULL,
-    street_name  VARCHAR(30) NOT NULL,
+    street_name VARCHAR(30) NOT NULL,
     zip_code INT NOT NULL,
     city  VARCHAR(25) NOT NULL,	
     PRIMARY KEY (supplier_id) 
@@ -24,7 +24,7 @@ CREATE TABLE ingredient (
     ingredient_name VARCHAR(20) NOT NULL,
     quantity INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    supplier_id int,
+    supplier_id INT,
     PRIMARY KEY(ingredient_id),
     FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id)
 );
@@ -41,16 +41,16 @@ CREATE TABLE category (
     category_id serial UNIQUE NOT NULL,
     category_name VARCHAR(30) NOT NULL,
     description VARCHAR(100) NOT NULL,
-    product_id VARCHAR(5) NOT NULL,
+    product_id INT,
     PRIMARY KEY(category_id, product_id),
     FOREIGN KEY(product_id) REFERENCES product(product_id)
 );
 
 CREATE TABLE recipe (
-    product_id serial UNIQUE NOT NULL,
-    ingredient_id int,
+    product_id INT,
+    ingredient_id INT,
     quantity INT NOT NULL,
-    PRIMARY KEY( product_id, ingredient_id),
+    PRIMARY KEY(product_id, ingredient_id),
     FOREIGN KEY(ingredient_id) REFERENCES ingredient(ingredient_id),
     FOREIGN KEY(product_id) REFERENCES product(product_id)
 );
@@ -67,7 +67,7 @@ CREATE TABLE customer (
 
 CREATE TABLE orders ( 
     orders_id serial UNIQUE NOT NULL,
-    customer_id VARCHAR(6) NOT NULL,
+    customer_id INT,
     customer_name VARCHAR(20) NOT NULL,
     order_date DATE NOT NULL,
     ship_to VARCHAR(20) NOT NULL,
@@ -77,12 +77,11 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE order_details (
-    orders_id serial UNIQUE NOT NULL,
-    product_id VARCHAR(5) NOT NULL,
+    orders_id INT,
+    product_id INT,
     quantity INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
-    quantity INT NOT NULL,
-    PRIMARY KEY ( orders_id, product_id),
+    PRIMARY KEY (orders_id, product_id),
     FOREIGN KEY(product_id) REFERENCES product(product_id),
     FOREIGN KEY(orders_id) REFERENCES orders(orders_id)
 );
@@ -119,19 +118,18 @@ INSERT INTO category (category_id, category_name, description, product_id)
     VALUES
     (1001, 'detox', 'detoxify the body, gain energy', 1),
     (1002, 'healthy', 'felt relaxed and fit', 4),
-    (1003, 'superfood', 'large amount of several specific nutrients ', 2),
     (1003, 'superfood', 'large amount of several specific nutrients ', 3);
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
-    (1, 1,2),
-    (1, 2,1),
-    (1, 10,2),
-    (1, 5,1),
-    (2, 8,2),
-    (2, 5,1),
-    (3, 3,4),
-    (3, 6,1);
+    (1, 1, 2),
+    (1, 2, 1),
+    (1, 10, 2),
+    (1, 5, 1),
+    (2, 8, 2),
+    (2, 5, 1),
+    (3, 3, 4),
+    (3, 6, 1);
 
 INSERT INTO customer ( fname, lname, streetname, zip_code, city)
     VALUES
@@ -142,7 +140,7 @@ INSERT INTO customer ( fname, lname, streetname, zip_code, city)
 INSERT INTO orders (customer_id, customer_name, order_date, ship_to, invoice_amount)
     VALUES
     (1, 'Jan Maier', DATE '2022-01-30','Tupelo, MS', 29.0),
-    (2, 'Jonas Müller', DATE '2022-02-02', 'München, DE' 50.0),
+    (2, 'Jonas Müller', DATE '2022-02-02', 'München, DE', 50.0),
     (3, 'Sabie Glück', DATE '2022-02-16', 'Mannheim, DE', 40.0),
     (1, 'Jan Maier', DATE '2022-02-17', 'London, UK', 5.0),
     (2, 'Jan Maier', DATE '2022-02-18', 'Tokyo, Japan', 10.0);
