@@ -26,7 +26,7 @@ CREATE TABLE ingredient (
     price NUMERIC(10,2) NOT NULL,
     supplier_id INT,
     PRIMARY KEY(ingredient_id),
-    FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id)
+    FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id) ON DELETE CASCADE
 );
 
 CREATE TABLE product (
@@ -43,7 +43,7 @@ CREATE TABLE category (
     description VARCHAR(100) NOT NULL,
     product_id INT,
     PRIMARY KEY(category_id, product_id),
-    FOREIGN KEY(product_id) REFERENCES product(product_id)
+    FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE recipe (
@@ -51,8 +51,8 @@ CREATE TABLE recipe (
     ingredient_id INT,
     quantity INT NOT NULL,
     PRIMARY KEY(product_id, ingredient_id),
-    FOREIGN KEY(ingredient_id) REFERENCES ingredient(ingredient_id),
-    FOREIGN KEY(product_id) REFERENCES product(product_id)
+    FOREIGN KEY(ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE,
+    FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE customer (
@@ -73,7 +73,7 @@ CREATE TABLE orders (
     ship_to VARCHAR(20) NOT NULL,
     invoice_amount NUMERIC(10,2) NOT NULL,
     PRIMARY KEY (orders_id),
-    FOREIGN KEY (customer_id) REFERENCES customer(customer_id)
+    FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 );
 
 CREATE TABLE order_details (
@@ -82,8 +82,8 @@ CREATE TABLE order_details (
     quantity INT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     PRIMARY KEY (orders_id, product_id),
-    FOREIGN KEY(product_id) REFERENCES product(product_id),
-    FOREIGN KEY(orders_id) REFERENCES orders(orders_id)
+    FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE CASCADE,
+    FOREIGN KEY(orders_id) REFERENCES orders(orders_id) ON DELETE CASCADE
 );
 
 
@@ -116,9 +116,9 @@ INSERT INTO product (product_name, quantity, selling_price)
 
 INSERT INTO category (category_id, category_name, description, product_id)
     VALUES
-    (1001, 'detox', 'detoxify the body, gain energy', 1),
-    (1002, 'healthy', 'felt relaxed and fit', 4),
-    (1003, 'superfood', 'large amount of several specific nutrients ', 3);
+    (1, 'detox', 'detoxify the body, gain energy', 1),
+    (2, 'healthy', 'felt relaxed and fit', 4),
+    (3, 'superfood', 'large amount of several specific nutrients ', 3);
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
@@ -143,7 +143,7 @@ INSERT INTO orders (customer_id, customer_name, order_date, ship_to, invoice_amo
     (2, 'Jonas Müller', DATE '2022-02-02', 'München, DE', 50.0),
     (3, 'Sabie Glück', DATE '2022-02-16', 'Mannheim, DE', 40.0),
     (1, 'Jan Maier', DATE '2022-02-17', 'London, UK', 5.0),
-    (2, 'Jan Maier', DATE '2022-02-18', 'Tokyo, Japan', 10.0);
+    (1, 'Jan Maier', DATE '2022-02-18', 'Tokyo, Japan', 10.0);
 
 INSERT INTO order_details (orders_id, product_id, quantity, price)
     VALUES
