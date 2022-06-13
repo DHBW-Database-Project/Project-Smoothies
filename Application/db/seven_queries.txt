@@ -1,11 +1,12 @@
+#All of customers are from München, who don't live in the city district with zip code "80333".
 SELECT*
 FROM customer
 WHERE city = 'München'
 AND zip_code != 80333
 
 
-
-SELECT sum(price), fname,lname
+#This table sums up the total sales per customer
+SELECT fname,lname, sum(price) AS total_sales
 FROM customer a
 JOIN orders b
 ON a.customer_id = b.customer_id
@@ -14,6 +15,7 @@ ON b.orders_id = c.orders_id
 GROUP BY fname,lname
 
 
+#All ingredients which were imported from the Supplier "Extro AG" with the ID = 3
 SELECT a.ingredient_id, a.ingredient_name, b.supplier_id, b.supplier_name
 FROM ingredient a
 JOIN supplier b
@@ -21,19 +23,19 @@ ON a.supplier_id=b.supplier_id
 WHERE b.supplier_id = '3'
 
 
-
+#street_name , zip_code, city data of supplier were written as adress
 select supplier_id, supplier_name,
 street_name ||', '|| zip_code ||' '|| city as adress
 from supplier
 
-
-SELECT distinct c.product_id,  count(*) quantity
+#How many times was the product ordered?
+SELECT distinct c.product_id,  count(b.quantity) AS ordered_times
 FROM order_details b
 JOIN product c
 ON b.product_id = c.product_id
 GROUP BY c.product_id
 
-
+#List of the products, which contain ingredient_id = 5
 SELECT a.product_id, a.product_name
 FROM product a
 JOIN category b
@@ -52,6 +54,7 @@ FROM recipe
 WHERE product_id='15001')
 '
 
+#Set Operation (Union): contains all the cities, from which the customer and suppliers come 
 SELECT distinct city
 FROM customer
 UNION 
