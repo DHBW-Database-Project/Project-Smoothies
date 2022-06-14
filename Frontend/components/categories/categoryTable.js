@@ -41,6 +41,7 @@ const CategoryTable = () => {
                                 <TableCell>Name</TableCell>
                                 <TableCell>Description</TableCell>
                                 <TableCell>Product ID</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
