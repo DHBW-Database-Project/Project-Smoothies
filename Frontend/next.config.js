@@ -12,7 +12,6 @@ const env = {
   INGREDIENT_URL: "http://localhost:5001/ingredient",
   CATEGORY_URL: "http://localhost:5001/category",
   ORDER_URL: "http://localhost:5001/order",
-  ORDERDETAIL_URL: "http://localhost:5001/orderdetail",
 }
 
 module.exports = {
