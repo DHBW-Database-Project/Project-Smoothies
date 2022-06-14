@@ -42,6 +42,7 @@ const IngredientTable = () => {
                                 <TableCell>Quantity</TableCell>
                                 <TableCell>Price</TableCell>
                                 <TableCell>Supplier ID</TableCell>
+                                <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -50,7 +51,7 @@ const IngredientTable = () => {
                                     <TableCell>{ingredient["id"]}</TableCell>
                                     <TableCell>{ingredient["name"]}</TableCell>
                                     <TableCell>{ingredient["quantity"]}</TableCell>
-                                    <TableCell align="right">{`$${ingredient["price"]}`}</TableCell>
+                                    <TableCell>{`$${ingredient["price"]}`}</TableCell>
                                     <TableCell>{ingredient["supplierId"]}</TableCell>
                                     <TableCell>
                                         <DeleteButton
