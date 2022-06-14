@@ -2,7 +2,7 @@ from flask import Flask, jsonify, abort
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from query import getAllSuppliers, getAllIngredients, getAllCustomers, getAllProducts, getAllCategories, getAllOrders, getAllOrderDetails
+from query import getAllSuppliers, getAllIngredients, getAllCustomers, getAllProducts, getAllCategories, getAllOrders
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
@@ -116,7 +116,7 @@ class Ingredient(Resource):
         args = ingredient_delete_args.parse_args()
         try:
             deleteIngredient = engine.execute("\
-                DELETE FROM product WHERE ingredient_id = %s;", (args["rowId"]))
+                DELETE FROM ingredient WHERE ingredient_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
             errorMessage = str(e.__dict__["orig"])
             abort(400, errorMessage)
@@ -150,7 +150,7 @@ class Customer(Resource):
     def post(self):
         args = customer_post_args.parse_args()
         addCustomer = engine.execute("\
-            INSERT INTO customer (customer_id, fname, lname, streetname, zip_code, city)\
+            INSERT INTO customer (fname, lname, streetname, zip_code, city)\
                 VALUES (%s, %s, %s, %s, %s)", (args["customerFName"], args["customerLName"],
                                                args["customerStreet"], args["customerZipcode"], args["customerCity"]))
         return {"result": args}
@@ -189,7 +189,7 @@ class Product(Resource):
     def post(self):
         args = product_post_args.parse_args()
         addProduct = engine.execute("\
-            INSERT INTO product (product_id, product_name, quantity, selling_price)\
+            INSERT INTO product (product_name, quantity, selling_price)\
                 VALUES (%s, %s, %s)", (args["productName"], args["productQuantity"],args["productPrice"]))
         return {"result": args}
 
@@ -227,7 +227,7 @@ class Category(Resource):
     def post(self):
         args = category_post_args.parse_args()
         addCategory = engine.execute("\
-            INSERT INTO category (category_id, category_name, description, product_id)\
+            INSERT INTO category (category_name, description, product_id)\
                 VALUES (%s, %s, %s)", (args["categoryName"], args["categoryDescription"], args["productId"]))
         return {"result": args}
 
@@ -257,6 +257,10 @@ order_post_args.add_argument(
 order_post_args.add_argument(
     "invoiceAmount", type=str, help="Invoice Amount is required", required=True)
 
+order_delete_args = reqparse.RequestParser()
+order_delete_args.add_argument(
+    "rowId", type=int, help="Row ID is required", required=True)
+
 class Order(Resource):
     def get(self):
         orders = getAllOrders(engine)
@@ -265,38 +269,23 @@ class Order(Resource):
     def post(self):
         args = order_post_args.parse_args()
         addOrder = engine.execute("\
-            INSERT INTO order (order_id, customer_id, customer_name, order_date, ship_to, invoice_amount)\
+            INSERT INTO order (customer_id, customer_name, order_date, ship_to, invoice_amount)\
                 VALUES (%s, %s, %s, %s, %s)", (args["customerId"], args["customerName"],
                         args["orderDate"], args["shipTo"],args["invoiceAmount"]))
         return {"result": args}
 
+    def delete(self):
+        args = order_delete_args.parse_args()
+        try:
+            deleteOrder = engine.execute("\
+                DELETE FROM orders WHERE order_id = %s;", (args["rowId"]))
+        except SQLAlchemyError as e:
+            errorMessage = str(e.__dict__["orig"])
+            abort(400, errorMessage)
+            
+        return 200
 
-#OrderDetails 
-orderDetail_post_args = reqparse.RequestParser()
-orderDetail_post_args.add_argument(
-    "orderId", type=str, help="Order ID is required", required=True)
-orderDetail_post_args.add_argument(
-    "productId", type=str, help="Product ID is required", required=True)
-orderDetail_post_args.add_argument(
-    "quantity", type=str, help="Quantity is required", required=True)
-orderDetail_post_args.add_argument(
-    "price", type=str, help="Price is required", required=True)
-
-class OrderDetail(Resource):
-    def get(self):
-        orderDetails = getAllOrderDetails(engine)
-        return jsonify(orderDetails)
-
-    def post(self):
-        args = orderDetail_post_args.parse_args()
-        addOrderDetail = engine.execute("\
-            INSERT INTO order (orders_id, product_id, quantity, price)\
-                VALUES (%s, %s, %s, %s)", (args["orderId"], args["productId"],
-                            args["quantity"], args["price"]))
-        return {"result": args}
-
-
-api.add_resource(OrderDetail, "/orderDetail")
+api.add_resource(Order, "/order")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
