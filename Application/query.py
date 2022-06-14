@@ -58,24 +58,13 @@ def getAllCategories(engine):
     return result
 
 def getAllOrders(engine):
-    orders = engine.execute("SELECT * FROM order")
+    orders = engine.execute("SELECT * FROM orders")
     result = []
 
     for row in orders:
         newRow = {"id": row[0], "customerId": row[1], 
                 "customerName": row[2], "date": row[3], 
-                "shipTo": row[4], "invoiceAmount": row[5]}
-        result.append(newRow)
-    
-    return result
-
-def getAllOrderDetails(engine):
-    categories = engine.execute("SELECT * FROM category")
-    result = []
-
-    for row in categories:
-        newRow = {"id": row[0], "orderId": row[1], "productId": row[2],
-                  "quantity": row[3], "price": row[4]}
+                "shipTo": row[4], "invoiceAmount": int(row[5])}
         result.append(newRow)
     
     return result
