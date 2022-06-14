@@ -116,9 +116,9 @@ INSERT INTO product (product_name, quantity, selling_price)
 
 INSERT INTO category (category_id, category_name, description, product_id)
     VALUES
-    (1001, 'detox', 'detoxify the body, gain energy', 1),
-    (1002, 'healthy', 'felt relaxed and fit', 4),
-    (1003, 'superfood', 'large amount of several specific nutrients ', 3);
+    (1, 'detox', 'detoxify the body, gain energy', 1),
+    (2, 'healthy', 'felt relaxed and fit', 4),
+    (3, 'superfood', 'large amount of several specific nutrients ', 3);
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
