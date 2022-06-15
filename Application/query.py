@@ -64,7 +64,18 @@ def getAllOrders(engine):
     for row in orders:
         newRow = {"id": row[0], "customerId": row[1], 
                 "customerName": row[2], "date": row[3], 
-                "shipTo": row[4], "invoiceAmount": int(row[5])}
+                "shipTo": row[4], "invoiceAmount": row[5]}
+        result.append(newRow)
+    
+    return result
+
+def getAllRecipes(engine):
+    recipes = engine.execute("SELECT * FROM recipe")
+    result = []
+
+    for row in recipes:
+        newRow = { "productId": row[0], 
+                "ingredientId": row[1], "quantity": row[2]}
         result.append(newRow)
     
     return result
