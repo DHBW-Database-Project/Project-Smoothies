@@ -71,6 +71,12 @@ const ListItems = () => {
                 </ListItemIcon>
                 <ListItemText primary="Category" />
             </ListItemButton>
+            <ListItemButton onClick={() => switchPage("Recipe")}>
+                <ListItemIcon>
+                    <CategoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Recipe" />
+            </ListItemButton>
         </>
     )
 }
