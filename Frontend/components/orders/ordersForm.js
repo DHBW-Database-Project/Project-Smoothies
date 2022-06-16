@@ -50,8 +50,7 @@ const OrdersForm = () => {
         setDateError(false)
         setShipToError(false)
         setInvoiceAmountError(false)
-
-    
+   
         if (customerID === "") {
             setCustomerIdError(true);
         }
@@ -72,7 +71,7 @@ const OrdersForm = () => {
             setInvoiceAmountError(true);
         }
         // request is sent after all input are valid
-        if (customerID && customerName  && date && shipTo &&  invoiceAmount) {
+        if (customerID && customerName && date && shipTo && invoiceAmount) {
             fetch(process.env.ORDER_URL, options)
                 .then(data => {
                     if (data.status == "400") {
