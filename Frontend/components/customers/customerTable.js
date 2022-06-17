@@ -44,6 +44,7 @@ const CustormersTable = () => {
                             <TableCell>Street</TableCell>
                             <TableCell>Zip Code</TableCell>
                             <TableCell>City</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

@@ -28,6 +28,16 @@ const fetchCategories = async () => {
     const res = await fetch(process.env.CATEGORY_URL)
     return res.json()
 }
+const fetchOrders = async () => {
+    const res = await fetch(process.env.ORDER_URL)
+    return res.json()
+}
+
+const fetchRecipe = async () => {
+    const res = await fetch(process.env.RECIPE_URL)
+    return res.json()
+}
+
 // Data Context is where all the data query for the table are stored.
 const DataContextProvider = (props) => {
     const { data: supplierData, status: supplierStatus,
@@ -65,16 +75,20 @@ const DataContextProvider = (props) => {
             // prevent displaying nothing when querying
             keepPreviousData: true,
         })
-    const { data: orderDetailData, status: orderDetailStatus,
-        refetch: refetchOrderDetail } = useQuery("orderDetail", () => fetchOrderDetails(), {
+
+    const { data: recipeData, status: recipeStatus,
+        refetch: refetchRecipe } = useQuery("recipe", () => fetchRecipe(), {
             // prevent displaying nothing when querying
             keepPreviousData: true,
         })
+
     const value = { supplierData, supplierStatus, refetchSupplier, 
                     customerData, customerStatus, refetchCustomer,
                     productData, productStatus, refetchProduct,
                     ingredientData, ingredientStatus, refetchIngredient,
-                    categoryData, categoryStatus, refetchCategory
+                    categoryData, categoryStatus, refetchCategory,
+                    orderData, orderStatus, refetchOrder,
+                    recipeData, recipeStatus, refetchRecipe
      }
     return (
         <DataContext.Provider value={value}>

@@ -6,28 +6,22 @@ import { DataContext } from "../../contexts/DataContext";
 
                   
 const OrdersForm = () => {
-    const { refetchOrder, refetchOrderDetail } = useContext(DataContext)
+    const { refetchOrder } = useContext(DataContext)
 
     const [customerID, setCustomerID] = useState("")
     const [customerName, setCustomerName] = useState("")
-    const [productName, setProductName] = useState("")
     const [date, setDate] = useState("")
     const [shipTo, setShipTo] = useState("")
-    const [quantity, setQuantity] = useState("")
     const [invoiceAmount, setInvoiceAmount] = useState("")
-
 
     // This is to check is field is empty
     // if empty => set true => make field red
     const [customerIdError, setCustomerIdError] = useState(false)
     const [customerNameError, setCustomerNameError] = useState(false)
-    const [productNameError, setProductNameError] = useState(false)
     const [dateError, setDateError] = useState(false)
     const [shipToError, setShipToError] = useState(false)
-    const [quantityError, setQuantityError] = useState(false)
     const [invoiceAmountError, setInvoiceAmountError] = useState(false)
     
-
     // display error message when request fails
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -41,11 +35,9 @@ const OrdersForm = () => {
         body: JSON.stringify({
             customerId: customerID,
             customerName: customerName,
-            productName: productName,
             orderDate: date,
             shipTo: shipTo,
-            invoiceAmount: invoiceAmount,
-            orderQuantity: quantity
+            invoiceAmount: invoiceAmount
         })
     }
 
@@ -55,23 +47,16 @@ const OrdersForm = () => {
         setErrorMessage("")
         setCustomerIdError(false)
         setCustomerNameError(false)
-        setProductNameError(false)
         setDateError(false)
         setShipToError(false)
-        setQuantityError(false)
         setInvoiceAmountError(false)
-
-    
+   
         if (customerID === "") {
             setCustomerIdError(true);
         }
 
         if (customerName === "") {
             setCustomerNameError(true);
-        }
-
-        if (productName === "") {
-            setProductNameError(true);
         }
 
         if (date === "") {
@@ -82,14 +67,11 @@ const OrdersForm = () => {
             setShipToError(true);
         }
 
-        if (quantity === "") {
-            setQuantityError(true);
-        }
         if (invoiceAmount === "") {
             setInvoiceAmountError(true);
         }
         // request is sent after all input are valid
-        if (customerID && customerName && productName && date && shipTo && quantity && invoiceAmount) {
+        if (customerID && customerName && date && shipTo && invoiceAmount) {
             fetch(process.env.ORDER_URL, options)
                 .then(data => {
                     if (data.status == "400") {
@@ -97,7 +79,6 @@ const OrdersForm = () => {
                     }
                     // refetch table data after each request
                     refetchOrder()
-                    // refetchOrderDetail()
                 })
         }
     }
@@ -130,18 +111,7 @@ const OrdersForm = () => {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setProductName(e.target.value)}
-                            label="Product"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={productNameError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) => setDate(Date(e.target.value))}
                             label="Date"
                             variant="outlined"
                             margin="normal"
@@ -159,17 +129,6 @@ const OrdersForm = () => {
                             fullWidth
                             required
                             error={shipToError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setQuantity(e.target.value)}
-                            label="Quantity"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={quantityError}
                         />
                     </Grid>
                     <Grid item xs={4}>

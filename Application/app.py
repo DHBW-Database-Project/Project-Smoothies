@@ -2,7 +2,7 @@ from flask import Flask, jsonify, abort
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from query import getAllSuppliers, getAllIngredients, getAllCustomers, getAllProducts, getAllCategories, getAllOrders
+from query import getAllSuppliers, getAllIngredients, getAllCustomers, getAllProducts, getAllCategories, getAllOrders, getAllRecipes
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
@@ -286,6 +286,45 @@ class Order(Resource):
         return 200
 
 api.add_resource(Order, "/order")
+
+#Recipe
+recipe_post_args = reqparse.RequestParser()
+recipe_post_args.add_argument(
+    "productId", type=str, help="Product ID is required", required=True)
+recipe_post_args.add_argument(
+    "ingredientId", type=str, help="Ingredient ID is required", required=True)
+recipe_post_args.add_argument(
+    "quantity", type=str, help="Quantity is required", required=True)
+
+
+recipe_delete_args = reqparse.RequestParser()
+recipe_delete_args.add_argument(
+    "rowId", type=int, help="Row ID is required", required=True)
+
+class Recipe(Resource):
+    def get(self):
+        recipes = getAllRecipes(engine)
+        return jsonify(recipes)
+
+    def post(self):
+        args = recipe_post_args.parse_args()
+        addRecipe = engine.execute("\
+            INSERT INTO recipe (product_id, ingredient_id, quantity)\
+                VALUES (%s, %s, %s)", (args["productId"], args["ingredientId"], args["quantity"]))
+        return {"result": args}
+
+    def delete(self):
+        args = recipe_delete_args.parse_args()
+        try:
+            deleteRecipe = engine.execute("\
+                DELETE FROM recipe WHERE product_id = %s AND ingredient_id = %s;", (args["productId"], args["ingredientId"]))
+        except SQLAlchemyError as e:
+            errorMessage = str(e.__dict__["orig"])
+            abort(400, errorMessage)
+            
+        return 200
+
+api.add_resource(Recipe, "/recipe")
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5001)
