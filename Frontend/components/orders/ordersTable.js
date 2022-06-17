@@ -52,7 +52,7 @@ const OrdersTable = () => {
                                 <TableCell>{order["id"]}</TableCell>
                                 <TableCell>{order["customerId"]}</TableCell>
                                 <TableCell>{order["customerName"]}</TableCell>
-                                <TableCell>{Date(order["orderDate"]).toString()}</TableCell>
+                                <TableCell>{order["orderDate"]}</TableCell>
                                 <TableCell>{order["shipTo"]}</TableCell>
                                 <TableCell align="right">{`$${order["invoiceAmount"]}`}</TableCell>
                             </TableRow>
