@@ -114,11 +114,11 @@ INSERT INTO product (product_name, quantity, selling_price)
     ('Kiwi Smoothie',  120, 5.0),
     ('Golden Root',  120, 4.0);
 
-INSERT INTO category (category_id, category_name, description, product_id)
+INSERT INTO category (category_name, description, product_id)
     VALUES
-    (1, 'detox', 'detoxify the body, gain energy', 1),
-    (2, 'healthy', 'felt relaxed and fit', 4),
-    (3, 'superfood', 'large amount of several specific nutrients ', 3);
+    ('detox', 'detoxify the body, gain energy', 1),
+    ('healthy', 'felt relaxed and fit', 4),
+    ('superfood', 'large amount of several specific nutrients ', 3);
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
