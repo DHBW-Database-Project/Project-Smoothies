@@ -1,4 +1,4 @@
-import React from 'react'
+import Head from 'next/head'
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
@@ -8,21 +8,26 @@ import OrdersForm from '../components/orders/ordersForm';
 const Orders = () => {
     return (
         <div>
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <OrdersForm/>
-                    </Paper>
+            <Head>
+                <title>Orders</title>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                            <OrdersForm />
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                            <OrdersTable />
+                        </Paper>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <OrdersTable/> 
-                    </Paper>
-                </Grid>
-            </Grid>
-        </Container>
-    </div>
+            </Container>
+        </div>
     )
 }
 

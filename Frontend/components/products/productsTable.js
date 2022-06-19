@@ -10,14 +10,14 @@ import Typography from "@mui/material/Typography";
 import DeleteButton from "../DeleteButton";
 
 const ProductsTable = () => {
-    const {productData, productStatus, refetchProduct } = useContext(DataContext)
+    const { productData, productStatus, refetchProduct } = useContext(DataContext)
     const [errorMessage, setErrorMessage] = useState("")
 
     // this will switch back to client side rendering
     // this is to evade problem with React v18
     const [isSSR, setIsSSR] = useState(true);
     useEffect(() => {
-        setIsSSR(false);  
+        setIsSSR(false);
     }, []);
 
     return (
@@ -32,39 +32,40 @@ const ProductsTable = () => {
             )}
 
             {!isSSR && productStatus === "success" && (
-            <>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>Product</TableCell>
-                            <TableCell>Quantity</TableCell>
-                            <TableCell align="right">Selling Price</TableCell>
-                            <TableCell></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {productData.map(product => (
-                            <TableRow key={product["id"]}>
-                                <TableCell>{product["id"]}</TableCell>
-                                <TableCell>{product["product_name"]}</TableCell>
-                                <TableCell>{product["quantity"]}</TableCell>
-                                <TableCell align="right">{`$${product["selling_price"]}`}</TableCell>
-                                <TableCell>
-                                <DeleteButton
-                                    endpointUrl={process.env.PRODUCT_URL}
-                                    rowId={product["id"]}
-                                    refetchFunc={refetchProduct}
-                                    setErrorMessage={setErrorMessage}
-                                />
-                            </TableCell>
+                <>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>Product</TableCell>
+                                <TableCell>Quantity</TableCell>
+                                <TableCell align="right">Selling Price</TableCell>
+                                {/* empty TableCell for delete option */}
+                                <TableCell></TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-                <Typography>{errorMessage}</Typography>
-            </>
-        )}
+                        </TableHead>
+                        <TableBody>
+                            {productData.map(product => (
+                                <TableRow key={product["id"]}>
+                                    <TableCell>{product["id"]}</TableCell>
+                                    <TableCell>{product["product_name"]}</TableCell>
+                                    <TableCell>{product["quantity"]}</TableCell>
+                                    <TableCell align="right">{`$${product["selling_price"]}`}</TableCell>
+                                    <TableCell align="right">
+                                        <DeleteButton
+                                            endpointUrl={process.env.PRODUCT_URL}
+                                            rowId={product["id"]}
+                                            refetchFunc={refetchProduct}
+                                            setErrorMessage={setErrorMessage}
+                                        />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                    <Typography>{errorMessage}</Typography>
+                </>
+            )}
         </>
     )
 }

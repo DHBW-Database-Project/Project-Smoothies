@@ -6,7 +6,7 @@ import { DataContext } from "../../contexts/DataContext";
 import Title from "../Title";
 
 const CustomerForm = () => {
-    const {refetchCustomer } = useContext(DataContext);
+    const { refetchCustomer } = useContext(DataContext);
 
     const [l_name, setLName] = useState("")
     const [f_name, setFName] = useState("")
@@ -81,7 +81,7 @@ const CustomerForm = () => {
                         setErrorMessage(data.statusText)
                     }
                     // refetch table data after each request
-                   
+
                     refetchCustomer()
                 })
         }
@@ -94,7 +94,7 @@ const CustomerForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             onChange={(e) => setFName(e.target.value)}
-                            label="Firtname"
+                            label="First name"
                             variant="outlined"
                             margin="normal"
                             fullWidth

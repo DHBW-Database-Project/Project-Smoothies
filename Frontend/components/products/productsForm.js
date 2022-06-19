@@ -10,7 +10,7 @@ const ProductsForm = () => {
     const [product_name, setPName] = useState("")
     const [quantity, setQuantity] = useState("")
     const [selling_price, setPrice] = useState("")
-  
+
     // This is to check is field is empty
     // if empty => set true => make field red
     const [pnameError, setPNameError] = useState(false)
@@ -30,7 +30,7 @@ const ProductsForm = () => {
         body: JSON.stringify({
             productName: product_name,
             productQuantity: quantity,
-            productSellingPrice: selling_price,
+            productPrice: selling_price,
         })
     }
 
@@ -58,7 +58,7 @@ const ProductsForm = () => {
 
         // request is sent after all input are valid
         if (product_name && quantity && selling_price) {
-            fetch(process.env.CUSTOMER_URL, options)
+            fetch(process.env.PRODUCT_URL, options)
                 .then(data => {
                     if (data.status == "400") {
                         setErrorMessage(data.statusText)
@@ -98,7 +98,7 @@ const ProductsForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             onChange={(e) => setPrice(e.target.value)}
-                            label="Sellingprice"
+                            label="Selling price"
                             variant="outlined"
                             margin="normal"
                             fullWidth
