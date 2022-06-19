@@ -272,7 +272,7 @@ class Order(Resource):
     def post(self):
         args = order_post_args.parse_args()
         addOrder = engine.execute("\
-            INSERT INTO order (customer_id, customer_name, order_date, ship_to, invoice_amount)\
+            INSERT INTO orders (customer_id, customer_name, order_date, ship_to, invoice_amount)\
                 VALUES (%s, %s, %s, %s, %s)", (args["customerId"], args["customerName"],
                         args["orderDate"], args["shipTo"],args["invoiceAmount"]))
         return {"result": args}
