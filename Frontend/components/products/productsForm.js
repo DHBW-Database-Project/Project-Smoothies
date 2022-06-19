@@ -10,7 +10,7 @@ const ProductsForm = () => {
     const [product_name, setPName] = useState("")
     const [quantity, setQuantity] = useState("")
     const [selling_price, setPrice] = useState("")
-  
+
     // This is to check is field is empty
     // if empty => set true => make field red
     const [pnameError, setPNameError] = useState(false)
@@ -98,7 +98,7 @@ const ProductsForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             onChange={(e) => setPrice(e.target.value)}
-                            label="Sellingprice"
+                            label="Selling price"
                             variant="outlined"
                             margin="normal"
                             fullWidth

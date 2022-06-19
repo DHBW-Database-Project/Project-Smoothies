@@ -1,5 +1,4 @@
 import Head from 'next/head'
-// import Deposits from '../components/Deposits';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
