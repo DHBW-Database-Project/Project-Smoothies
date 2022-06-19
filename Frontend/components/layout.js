@@ -123,7 +123,6 @@ const Layout = ({ children }) => {
                     <List component="nav">
                         <ListItems />
                         <Divider sx={{ my: 1 }} />
-                        <SecondaryListItems />
                     </List>
                 </Drawer>
                 <Box
