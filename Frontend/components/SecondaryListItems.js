@@ -15,19 +15,7 @@ const SecondaryListItems = () => {
                 <ListItemIcon>
                     <AssignmentIcon />
                 </ListItemIcon>
-                <ListItemText primary="Complex query 1" />
-            </ListItemButton>
-            <ListItemButton>
-                <ListItemIcon>
-                    <AssignmentIcon />
-                </ListItemIcon>
-                <ListItemText primary="Last quarter" />
-            </ListItemButton>
-            <ListItemButton>
-                <ListItemIcon>
-                    <AssignmentIcon />
-                </ListItemIcon>
-                <ListItemText primary="Year-end sale" />
+                <ListItemText primary="Complex queries" />
             </ListItemButton>
         </>
     )

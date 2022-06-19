@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 app = Flask(__name__)
 CORS(app)
+
 # set to false when on production
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:projectsmoothies@database:5432/postgres'
@@ -70,7 +71,9 @@ class Supplier(Resource):
         addSupplier = engine.execute("\
             INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)\
                 VALUES (%s, %s, %s, %s, %s)", (args["supplierName"], args["supplierCategory"],
-                                               args["supplierStreet"], args["supplierZipcode"], args["supplierCity"]))
+                                               args["supplierStreet"], args["supplierZipcode"],
+                                               args["supplierCity"]))
+        
         return {"result": args}
 
     def delete(self):
