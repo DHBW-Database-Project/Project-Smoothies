@@ -47,10 +47,11 @@ CREATE TABLE category (
 );
 
 CREATE TABLE recipe (
+    recipe_id serial UNIQUE NOT NULL,
     product_id INT,
     ingredient_id INT,
     quantity INT NOT NULL,
-    PRIMARY KEY(product_id, ingredient_id),
+    PRIMARY KEY(recipe_id),
     FOREIGN KEY(ingredient_id) REFERENCES ingredient(ingredient_id),
     FOREIGN KEY(product_id) REFERENCES product(product_id)
 );
