@@ -299,11 +299,6 @@ recipe_post_args.add_argument(
 recipe_post_args.add_argument(
     "quantity", type=str, help="Quantity is required", required=True)
 
-
-recipe_delete_args = reqparse.RequestParser()
-recipe_delete_args.add_argument(
-    "rowId", type=int, help="Row ID is required", required=True)
-
 class Recipe(Resource):
     def get(self):
         recipes = getAllRecipes(engine)
@@ -316,16 +311,6 @@ class Recipe(Resource):
                 VALUES (%s, %s, %s)", (args["productId"], args["ingredientId"], args["quantity"]))
         return {"result": args}
 
-    def delete(self):
-        args = recipe_delete_args.parse_args()
-        try:
-            deleteRecipe = engine.execute("\
-                DELETE FROM recipe WHERE product_id = %s AND ingredient_id = %s;", (args["productId"], args["ingredientId"]))
-        except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
-        return 200
 
 api.add_resource(Recipe, "/recipe")
 
