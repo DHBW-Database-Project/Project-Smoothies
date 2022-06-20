@@ -35,9 +35,9 @@ const RecipeTable = () => {
                     <Table size="small">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Product ID</TableCell>
-                                <TableCell>Ingredient ID</TableCell>
-                                <TableCell>Quantity</TableCell>
+                                <TableCell align="center">Product ID</TableCell>
+                                <TableCell align="center">Ingredient ID</TableCell>
+                                <TableCell align="center">Quantity</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
