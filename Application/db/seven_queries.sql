@@ -7,43 +7,39 @@ AND zip_code != 80333
 
 -- 2. This table sums up the total sales per customer
 SELECT fname,lname, sum(price) AS total_sales
-FROM customer a
-JOIN orders b
-ON a.customer_id = b.customer_id
+FROM customer a JOIN orders b
+    ON a.customer_id = b.customer_id
 JOIN order_details c
-ON b.orders_id = c.orders_id
+    ON b.orders_id = c.orders_id
 GROUP BY fname,lname
 
 
 -- 3. All ingredients which were imported from the Supplier "Extro AG" with the ID = 3
 SELECT a.ingredient_id, a.ingredient_name, b.supplier_id, b.supplier_name
-FROM ingredient a
-JOIN supplier b
-ON a.supplier_id = b.supplier_id
+FROM ingredient a JOIN supplier b
+    ON a.supplier_id = b.supplier_id
 WHERE b.supplier_id = '3'
 
 
--- 4. street_name , zip_code, city data of supplier were written as adress
+-- 4. concatenation of strings: street_name , zip_code, city of supplier were written as adress
 SELECT supplier_id, supplier_name,
-street_name ||', '|| zip_code ||' '|| city AS adress
+    street_name ||', '|| zip_code ||' '|| city AS adress
 FROM supplier
 
 -- 5. How many times was the product ordered?
-SELECT DISTINCT c.product_id, count(b.quantity) AS ordered_times
-FROM order_details b
-JOIN product c
-ON b.product_id = c.product_id
+SELECT DISTINCT c.product_id, COUNT(b.quantity) AS ordered_times
+FROM order_details b JOIN product c
+    ON b.product_id = c.product_id
 GROUP BY c.product_id
 
 -- 6. List of the products, which contain ingredient_id = 5
 SELECT a.product_id, a.product_name
-FROM product a
-JOIN category b
-ON a.product_id = b.product_id 
+FROM product a JOIN category b
+    ON a.product_id = b.product_id 
 JOIN recipe c
-ON a.product_id = c.product_id
+    ON a.product_id = c.product_id
 JOIN ingredient d
-ON c.ingredient_id = d.ingredient_id
+    ON c.ingredient_id = d.ingredient_id
 WHERE d.ingredient_id = '5'
 
 
@@ -53,11 +49,12 @@ FROM customer
 UNION 
 SELECT DISTINCT city
 FROM supplier
-ORDER BY City
+ORDER BY city
 
--- 8? 'SELECT DISTINCT product_id
+-- 8. Nested queries: The query retrieves ingredient _id of recipe
+-- which has the same quantity as the quantity with the given ingredient _id = '1'
+SELECT DISTINCT ingredient_id
 FROM recipe
-WHERE (product_id) IN ( SELECT product_id
-FROM recipe
-WHERE product_id='15001')
-'
+    WHERE ( quantity) IN ( SELECT  quantity
+                            FROM recipe
+                            WHERE ingredient_id = '1')
