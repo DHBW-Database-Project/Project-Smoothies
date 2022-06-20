@@ -74,8 +74,8 @@ def getAllRecipes(engine):
     result = []
 
     for row in recipes:
-        newRow = { "productId": row[0], 
-                "ingredientId": row[1], "quantity": row[2]}
+        newRow = { "id": row[0], "productId": row[1], 
+                "ingredientId": row[2], "quantity": row[3]}
         result.append(newRow)
     
     return result
