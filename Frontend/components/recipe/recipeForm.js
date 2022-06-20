@@ -7,8 +7,8 @@ import { DataContext } from "../../contexts/DataContext";
 const RecipeForm = () => {
     const { refetchRecipe } = useContext(DataContext)
 
-    const [productID, setProductID] = useState("")
-    const [ingredientID, setIngredientID] = useState("")
+    const [product_id, setProductID] = useState("")
+    const [ingredient_id, setIngredientID] = useState("")
     const [quantity, setQuantity] = useState("")
 
     // This is to check is field is empty
@@ -28,8 +28,8 @@ const RecipeForm = () => {
             "Content-Type": "application/json;charset=UTF-8",
         },
         body: JSON.stringify({
-            productID: productID,
-            ingredientID: ingredientID,
+            productId: product_id,
+            ingredientId: ingredient_id,
             quantity: quantity
         })
     }
@@ -42,11 +42,11 @@ const RecipeForm = () => {
         setIngredientIDError(false)
         setQuantityError(false)
 
-        if (productID === "") {
+        if (product_id === "") {
             setProductIDError(true);
         }
 
-        if (ingredientID === "") {
+        if (ingredient_id === "") {
             setIngredientIDError(true);
         }
 
@@ -55,7 +55,7 @@ const RecipeForm = () => {
         }
 
         // request is sent after all input are valid
-        if (productID  && ingredientID && quantity) {
+        if (product_id && ingredient_id && quantity) {
             fetch(process.env.RECIPE_URL, options)
                 .then(data => {
                     if (data.status == "400") {
