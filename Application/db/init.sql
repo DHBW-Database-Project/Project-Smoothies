@@ -15,7 +15,7 @@ CREATE TABLE supplier (
     supplier_category VARCHAR(30) NOT NULL,
     street_name VARCHAR(30) NOT NULL,
     zip_code INT NOT NULL,
-    city  VARCHAR(25) NOT NULL,	
+    city VARCHAR(25) NOT NULL,	
     PRIMARY KEY (supplier_id) 
 );
 
