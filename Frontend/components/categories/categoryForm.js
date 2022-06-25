@@ -4,21 +4,17 @@ import { Box } from "@mui/system";
 import { useContext, useState } from "react";
 import { DataContext } from "../../contexts/DataContext";
 
-                  
+
 const CategoryForm = () => {
-    const { refetchCategory} = useContext(DataContext)
+    const { refetchCategory } = useContext(DataContext)
 
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
-    const [productID, setProductID] = useState("")
-
-
 
     // This is to check is field is empty
     // if empty => set true => make field red
     const [nameError, setNameError] = useState(false)
     const [descriptionError, setDescriptionError] = useState(false)
-    const [productIDError, setProductIDError] = useState(false)
 
     // display error message when request fails
     const [errorMessage, setErrorMessage] = useState("");
@@ -33,7 +29,6 @@ const CategoryForm = () => {
         body: JSON.stringify({
             categoryName: name,
             categoryDescription: description,
-            productId: productID,
         })
     }
 
@@ -43,8 +38,7 @@ const CategoryForm = () => {
         setErrorMessage("")
         setNameError(false)
         setDescriptionError(false)
-        setProductIDError(false)
-        
+
         if (name === "") {
             setNameError(true);
         }
@@ -53,20 +47,14 @@ const CategoryForm = () => {
             setDescriptionError(true);
         }
 
-        if (productID === "") {
-            setProductIDError(true);
-        }
-
         // request is sent after all input are valid
-        if (name && description && productID) {
-            fetch(process.env.CATEGORY_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-                    refetchCategory()
-                })
+        if (name && description) {
+            const response = await fetch(process.env.CATEGORY_URL, options)
+            if (response.status == 400) {
+                let data = await response.json()
+                setErrorMessage(data.error)
+            }
+            refetchCategory()
         }
     }
     return (
@@ -94,17 +82,6 @@ const CategoryForm = () => {
                             fullWidth
                             required
                             error={descriptionError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setProductID(e.target.value)}
-                            label="Product_ID"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={productIDError}
                         />
                     </Grid>
                     <Grid item xs={12}>

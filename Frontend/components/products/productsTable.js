@@ -49,8 +49,8 @@ const ProductsTable = () => {
                                 <TableRow key={product["id"]}>
                                     <TableCell>{product["id"]}</TableCell>
                                     <TableCell>{product["product_name"]}</TableCell>
-                                    <TableCell>{product["quantity"]}</TableCell>
-                                    <TableCell align="right">{`$${product["selling_price"]}`}</TableCell>
+                                    <TableCell>{`$${product["selling_price"]}`}</TableCell>
+                                    <TableCell>{product["category_id"]}</TableCell>
                                     <TableCell align="right">
                                         <DeleteButton
                                             endpointUrl={process.env.PRODUCT_URL}

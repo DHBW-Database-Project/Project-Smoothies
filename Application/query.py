@@ -29,7 +29,7 @@ def getAllProducts(engine):
     result = []
     for row in products:
         newRow = {"id": row[0], "product_name": row[1],
-                  "quantity": row[2], "selling_price": row[3]}
+                  "selling_price": row[2], "category_id": row[3]}
         result.append(newRow)
     return result
 

@@ -28,8 +28,8 @@ const RecipeForm = () => {
             "Content-Type": "application/json;charset=UTF-8",
         },
         body: JSON.stringify({
-            productID: productID,
-            ingredientID: ingredientID,
+            productId: productID,
+            ingredientId: ingredientID,
             quantity: quantity
         })
     }
@@ -55,15 +55,14 @@ const RecipeForm = () => {
         }
 
         // request is sent after all input are valid
-        if (productID  && ingredientID && quantity) {
-            fetch(process.env.RECIPE_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-                    refetchRecipe()
-                })
+        if (productID && ingredientID && quantity) {
+            const response = await fetch(process.env.RECIPE_URL, options)
+            if (response.status == 400) {
+                let data = await response.json()
+                console.log(data)
+                setErrorMessage(data.error)
+            }
+            refetchRecipe()
         }
     }
     return (
@@ -75,6 +74,7 @@ const RecipeForm = () => {
                         <TextField
                             onChange={(e) => setProductID(e.target.value)}
                             label="Product ID"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -86,6 +86,7 @@ const RecipeForm = () => {
                         <TextField
                             onChange={(e) => setIngredientID(e.target.value)}
                             label="Ingredient ID"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -97,6 +98,7 @@ const RecipeForm = () => {
                         <TextField
                             onChange={(e) => setQuantity(e.target.value)}
                             label="Quantity"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth

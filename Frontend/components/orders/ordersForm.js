@@ -65,6 +65,7 @@ const OrdersForm = () => {
                         <TextField
                             onChange={(e) => setCustomerID(e.target.value)}
                             label="Customer ID"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -76,9 +77,7 @@ const OrdersForm = () => {
                         <TextField
                             id="datime-local"
                             onChange={(e) => setDate(e.target.value)}
-                            label="Date"
                             type="datetime-local"
-                            variant="outlined"
                             margin="normal"
                             fullWidth
                             required
