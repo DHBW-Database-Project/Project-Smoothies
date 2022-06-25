@@ -105,7 +105,7 @@ const CustomerForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             onChange={(e) => setLName(e.target.value)}
-                            label="Lastname"
+                            label="Last name"
                             variant="outlined"
                             margin="normal"
                             fullWidth

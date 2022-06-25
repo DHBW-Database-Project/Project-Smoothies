@@ -38,8 +38,8 @@ const ProductsTable = () => {
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Product</TableCell>
-                                <TableCell>Quantity</TableCell>
-                                <TableCell align="right">Selling Price</TableCell>
+                                <TableCell>Selling Price</TableCell>
+                                <TableCell align="right">Category ID</TableCell>
                                 {/* empty TableCell for delete option */}
                                 <TableCell></TableCell>
                             </TableRow>
