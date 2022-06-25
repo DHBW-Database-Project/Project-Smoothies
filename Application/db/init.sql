@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS order_details CASCADE;
 CREATE TABLE supplier (
     supplier_id serial UNIQUE NOT NULL,
     supplier_name VARCHAR(30) NOT NULL,
-    category VARCHAR(30) NOT NULL,
+    supplier_category VARCHAR(30) NOT NULL,
     street_name VARCHAR(30) NOT NULL,
     zip_code INT NOT NULL,
     city  VARCHAR(25) NOT NULL,	
@@ -29,21 +29,20 @@ CREATE TABLE ingredient (
     FOREIGN KEY(supplier_id) REFERENCES supplier(supplier_id) ON DELETE CASCADE
 );
 
-CREATE TABLE product (
-    product_id serial UNIQUE NOT NULL,
-    product_name VARCHAR(20) NOT NULL,
-    quantity INT NOT NULL,
-    selling_price INT NOT NULL,
-    PRIMARY KEY(product_id)
-);
-
 CREATE TABLE category (
     category_id serial UNIQUE NOT NULL,
     category_name VARCHAR(30) NOT NULL,
-    description VARCHAR(100) NOT NULL,
-    product_id INT,
-    PRIMARY KEY(category_id, product_id),
-    FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE CASCADE
+    category_description VARCHAR(100) NOT NULL,
+    PRIMARY KEY(category_id)
+);
+
+CREATE TABLE product (
+    product_id serial UNIQUE NOT NULL,
+    product_name VARCHAR(20) NOT NULL,
+    selling_price INT NOT NULL,
+    category_id INT,
+    PRIMARY KEY(product_id),
+    FOREIGN KEY(category_id) REFERENCES category(category_id) ON DELETE CASCADE
 );
 
 CREATE TABLE recipe (
@@ -57,9 +56,9 @@ CREATE TABLE recipe (
 
 CREATE TABLE customer (
     customer_id serial UNIQUE NOT NULL,
-    fname VARCHAR(20) NOT NULL,
-    lname VARCHAR(20) NOT NULL,
-    streetname VARCHAR(20) NOT NULL,
+    f_name VARCHAR(20) NOT NULL,
+    l_name VARCHAR(20) NOT NULL,
+    street_name VARCHAR(20) NOT NULL,
     zip_code INT NOT NULL,
     city VARCHAR(20) NOT NULL,
     PRIMARY KEY (customer_id)
@@ -68,10 +67,7 @@ CREATE TABLE customer (
 CREATE TABLE orders ( 
     orders_id serial UNIQUE NOT NULL,
     customer_id INT,
-    customer_name VARCHAR(20) NOT NULL,
-    order_date DATE NOT NULL,
-    ship_to VARCHAR(20) NOT NULL,
-    invoice_amount NUMERIC(10,2) NOT NULL,
+    orders_date DATE NOT NULL,
     PRIMARY KEY (orders_id),
     FOREIGN KEY (customer_id) REFERENCES customer(customer_id) ON DELETE CASCADE
 );
@@ -80,45 +76,44 @@ CREATE TABLE order_details (
     orders_id INT,
     product_id INT,
     quantity INT NOT NULL,
-    price NUMERIC(10,2) NOT NULL,
     PRIMARY KEY (orders_id, product_id),
     FOREIGN KEY(product_id) REFERENCES product(product_id) ON DELETE CASCADE,
     FOREIGN KEY(orders_id) REFERENCES orders(orders_id) ON DELETE CASCADE
 );
 
 
-INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)
+INSERT INTO supplier (supplier_name, supplier_category, street_name, zip_code, city)
     VALUES
-    ('Franz GmbH', 'x', 'Betastr. 15', 68167, 'Mannheim'),
-    ('Edelmann GbmH', 'y', 'Hauptstr. 20', 60308, 'Frankfurt am Main'),
-    ('Extro AG', 'z', 'Gartenstr. 1', 69115, 'Heidelberg'),
-    ('Tower AG', 'z', 'Klarstr. 1', 24568, 'Bielefeld');
+    ('Franz GmbH', 'standard', 'Betastr. 15', 68167, 'Mannheim'),
+    ('Edelmann GbmH', 'noble', 'Hauptstr. 20', 60308, 'Frankfurt am Main'),
+    ('Extro AG', 'convenient', 'Gartenstr. 1', 69115, 'Heidelberg'),
+    ('Tower AG', 'convenient', 'Klarstr. 1', 24568, 'Bielefeld');
 
 INSERT INTO ingredient (ingredient_name, quantity, price, supplier_id)
     VALUES
-    ('Apple', 100, 0.2,  1),
-    ('Banana',100, 0.3, 1),
-    ('Kiwi', 100, 0.4,  1),
-    ('Spinat',80, 0.3, 2),
-    ('Mint', 100, 0.12,  3),
-    ('Grapes',80, 0.3, 2),
-    ('Orange', 100, 0.2,  2),
-    ('Mango',80, 0.5, 2),
-    ('Lemon',80, 0.3, 2),
-    ('Carrot', 100, 0.30,  3);
+    ('Apple', 100, 0.2, 1),
+    ('Banana', 100, 0.3, 1),
+    ('Kiwi', 100, 0.4, 1),
+    ('Spinat', 80, 0.3, 2),
+    ('Mint', 100, 0.12, 3),
+    ('Grapes', 80, 0.3, 2),
+    ('Orange', 100, 0.2, 2),
+    ('Mango', 80, 0.5, 2),
+    ('Lemon', 80, 0.3, 2),
+    ('Carrot', 100, 0.30, 3);
 
-INSERT INTO product (product_name, quantity, selling_price)
+INSERT INTO category (category_name, category_description)
     VALUES
-    ('Botox Smoothie',  120, 5.0),
-    ('Mango Smoothie',  120, 3.0),
-    ('Kiwi Smoothie',  120, 5.0),
-    ('Golden Root',  120, 4.0);
+    ('detox', 'detoxify the body, gain energy'),
+    ('healthy', 'felt relaxed and fit'),
+    ('superfood', 'large amount of several specific nutrients');
 
-INSERT INTO category (category_name, description, product_id)
+INSERT INTO product (product_name, selling_price, category_id)
     VALUES
-    ('detox', 'detoxify the body, gain energy', 1),
-    ('healthy', 'felt relaxed and fit', 4),
-    ('superfood', 'large amount of several specific nutrients ', 3);
+    ('Botox Smoothie', 5.0, 1),
+    ('Mango Smoothie', 3.0, 2),
+    ('Kiwi Smoothie', 5.0, 2),
+    ('Golden Root', 4.0, 3);
 
 INSERT INTO recipe (product_id, ingredient_id, quantity)
     VALUES
@@ -131,29 +126,29 @@ INSERT INTO recipe (product_id, ingredient_id, quantity)
     (3, 3, 4),
     (3, 6, 1);
 
-INSERT INTO customer ( fname, lname, streetname, zip_code, city)
+INSERT INTO customer (f_name, l_name, street_name, zip_code, city)
     VALUES
     ('Jan', 'Maier', 'Janstr. 24', 68167, 'Mannheim'),
     ('Jonas', 'Müller', 'Ulmenweg 50', 80333, 'München'),
     ('Sabie', 'Glück', 'Regensbogen 20', 80469, 'München');
 
-INSERT INTO orders (customer_id, customer_name, order_date, ship_to, invoice_amount)
+INSERT INTO orders (customer_id, orders_date)
     VALUES
-    (1, 'Jan Maier', DATE '2022-01-30','Tupelo, MS', 29.0),
-    (2, 'Jonas Müller', DATE '2022-02-02', 'München, DE', 50.0),
-    (3, 'Sabie Glück', DATE '2022-02-16', 'Mannheim, DE', 40.0),
-    (1, 'Jan Maier', DATE '2022-02-17', 'London, UK', 5.0),
-    (1, 'Jan Maier', DATE '2022-02-18', 'Tokyo, Japan', 10.0);
+    (1, DATE '2022-01-30'),
+    (2, DATE '2022-02-02'),
+    (3, DATE '2022-02-16'),
+    (1, DATE '2022-02-17'),
+    (1, DATE '2022-02-18');
 
-INSERT INTO order_details (orders_id, product_id, quantity, price)
+INSERT INTO order_details (orders_id, product_id, quantity)
     VALUES
-    (1, 1, 4, 20.0),
-    (1, 2, 3, 9.0),
-    (2, 3, 10, 50.0),
-    (3, 4, 10, 40.0),
-    (4, 1, 1, 5.0),
-    (5, 1, 1, 5.0),
-    (5, 3, 1, 5.0);
+    (1, 1, 4),
+    (1, 2, 3),
+    (2, 3, 10),
+    (3, 4, 10),
+    (4, 1, 1),
+    (5, 1, 1),
+    (5, 3, 1);
 
 
 CREATE VIEW product_overview AS
@@ -161,23 +156,23 @@ SELECT
     a.product_id,
     a.product_name,
     d.category_name,
-    a.quantity AS quantity_of_stock,
     b.quantity AS sale_quantity
 FROM
-    product a
-    JOIN order_details b ON (a.product_id=b.product_id)
-    JOIN orders c ON (b.orders_id=c.orders_id)
-    JOIN category d ON (a.product_id=d.product_id);
+    product AS a
+    JOIN order_details AS b ON (a.product_id=b.product_id)
+    JOIN orders AS c ON (b.orders_id=c.orders_id)
+    JOIN category AS d ON (a.category_id=d.category_id);
 
 
-CREATE MATERIALIZED VIEW sum_customer_orders AS
-SELECT
-    distinct b.customer_id,
-    b.fname,
-    b.lname,
-    sum(a.invoice_amount) as total_amount
-FROM
-    orders a
-    JOIN customer b ON a.customer_id= b.customer_id
-GROUP BY b.customer_id
-ORDER BY total_amount DESC;
+-- We need a new matetrialized view to show the total sum of the orders
+-- CREATE MATERIALIZED VIEW sum_customer_orders AS
+-- SELECT
+--     distinct b.customer_id,
+--     b.fname,
+--     b.lname,
+--     sum(a.invoice_amount) as total_amount
+-- FROM
+--     orders a
+--     JOIN customer b ON a.customer_id= b.customer_id
+-- GROUP BY b.customer_id
+-- ORDER BY total_amount DESC;
