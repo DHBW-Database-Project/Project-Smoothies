@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import { DataContext } from "../../contexts/DataContext";
 import { useContext, useEffect, useState } from "react";
 import DeleteButton from "../DeleteButton";
+import moment from 'moment';
 
 
 const OrdersTable = () => {
@@ -39,10 +40,7 @@ const OrdersTable = () => {
                             <TableRow>
                                 <TableCell>ID</TableCell>
                                 <TableCell>Customer ID</TableCell>
-                                <TableCell>Customer Name</TableCell>
                                 <TableCell>Date</TableCell>
-                                <TableCell>Ship To</TableCell>
-                                <TableCell align="right">Invoice Amount</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
@@ -51,10 +49,7 @@ const OrdersTable = () => {
                                 <TableRow key={order["id"]}>
                                     <TableCell>{order["id"]}</TableCell>
                                     <TableCell>{order["customerId"]}</TableCell>
-                                    <TableCell>{order["customerName"]}</TableCell>
-                                    <TableCell>{order["orderDate"]}</TableCell>
-                                    <TableCell>{order["shipTo"]}</TableCell>
-                                    <TableCell align="right">{`$${order["invoiceAmount"]}`}</TableCell>
+                                    <TableCell>{moment(order["orderDate"]).format("lll")}</TableCell>
                                     <TableCell>
                                         <DeleteButton
                                             endpointUrl={process.env.ORDER_URL}
