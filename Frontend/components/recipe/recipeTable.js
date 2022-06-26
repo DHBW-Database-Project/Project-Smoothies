@@ -1,3 +1,5 @@
+import { DataContext } from "../../contexts/DataContext";
+import { useContext, useEffect, useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -5,8 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from '../Title';
 import Typography from "@mui/material/Typography";
-import { DataContext } from "../../contexts/DataContext";
-import { useContext, useEffect, useState } from "react";
+import DeleteButton from "../DeleteButton";
+
 
 const RecipeTable = () => {
     const { recipeData, recipeStatus, refetchRecipe } = useContext(DataContext)
@@ -50,6 +52,7 @@ const RecipeTable = () => {
                             ))}
                         </TableBody>
                     </Table>
+                    <Typography>{errorMessage}</Typography>
                 </>
             )}
         </>

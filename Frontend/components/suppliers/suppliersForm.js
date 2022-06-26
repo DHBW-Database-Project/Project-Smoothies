@@ -1,8 +1,8 @@
-import Title from "../Title"
 import { Button, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useContext, useState } from "react";
 import { DataContext } from "../../contexts/DataContext";
+import Title from "../Title";
 
 const SuppliersForm = () => {
     const { refetchSupplier } = useContext(DataContext)
@@ -73,14 +73,12 @@ const SuppliersForm = () => {
 
         // request is sent after all input are valid
         if (name && category && street && zipcode && city) {
-            fetch(process.env.SUPPLIER_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-                    refetchSupplier()
-                })
+            const response = await fetch(process.env.SUPPLIER_URL, options)
+            if (response.status === 400) {
+                let data = await response.json()
+                setErrorMessage(data.error)
+            }
+            refetchSupplier()
         }
     }
     return (
@@ -125,6 +123,7 @@ const SuppliersForm = () => {
                         <TextField
                             onChange={(e) => setZipcode(e.target.value)}
                             label="Zipcode"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -149,7 +148,7 @@ const SuppliersForm = () => {
                                 type="submit"
                                 variant="contained"
                             >
-                                Add supplier
+                                Send
                             </Button>
                             <Typography mt={2}>
                                 {errorMessage}

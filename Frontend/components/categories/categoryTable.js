@@ -40,7 +40,6 @@ const CategoryTable = () => {
                                 <TableCell>ID</TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Description</TableCell>
-                                <TableCell>Product ID</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
@@ -50,7 +49,6 @@ const CategoryTable = () => {
                                     <TableCell>{category["id"]}</TableCell>
                                     <TableCell>{category["name"]}</TableCell>
                                     <TableCell>{category["description"]}</TableCell>
-                                    <TableCell>{category["productId"]}</TableCell>
                                     <TableCell>
                                         <DeleteButton
                                             endpointUrl={process.env.CATEGORY_URL}

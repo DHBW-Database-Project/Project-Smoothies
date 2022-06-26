@@ -75,15 +75,12 @@ const CustomerForm = () => {
 
         // request is sent after all input are valid
         if (f_name && l_name && streetname && zip_code && city) {
-            fetch(process.env.CUSTOMER_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-
-                    refetchCustomer()
-                })
+            const response = await fetch(process.env.CUSTOMER_URL, options)
+            if (response.status == 400) {
+                let data = await response.json()
+                setErrorMessage(data.error)
+            }
+            refetchCustomer()
         }
     }
     return (
@@ -105,7 +102,7 @@ const CustomerForm = () => {
                     <Grid item xs={4}>
                         <TextField
                             onChange={(e) => setLName(e.target.value)}
-                            label="Lastname"
+                            label="Last name"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -128,6 +125,7 @@ const CustomerForm = () => {
                         <TextField
                             onChange={(e) => setZipcode(e.target.value)}
                             label="Zipcode"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth

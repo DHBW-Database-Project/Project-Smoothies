@@ -4,24 +4,17 @@ import { Box } from "@mui/system";
 import { useContext, useState } from "react";
 import { DataContext } from "../../contexts/DataContext";
 
-                  
 const OrdersForm = () => {
     const { refetchOrder } = useContext(DataContext)
 
     const [customerID, setCustomerID] = useState("")
-    const [customerName, setCustomerName] = useState("")
     const [date, setDate] = useState("")
-    const [shipTo, setShipTo] = useState("")
-    const [invoiceAmount, setInvoiceAmount] = useState("")
 
     // This is to check is field is empty
     // if empty => set true => make field red
     const [customerIdError, setCustomerIdError] = useState(false)
-    const [customerNameError, setCustomerNameError] = useState(false)
     const [dateError, setDateError] = useState(false)
-    const [shipToError, setShipToError] = useState(false)
-    const [invoiceAmountError, setInvoiceAmountError] = useState(false)
-    
+
     // display error message when request fails
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -34,10 +27,7 @@ const OrdersForm = () => {
         },
         body: JSON.stringify({
             customerId: customerID,
-            customerName: customerName,
             orderDate: date,
-            shipTo: shipTo,
-            invoiceAmount: invoiceAmount
         })
     }
 
@@ -46,40 +36,24 @@ const OrdersForm = () => {
         e.preventDefault()
         setErrorMessage("")
         setCustomerIdError(false)
-        setCustomerNameError(false)
         setDateError(false)
-        setShipToError(false)
-        setInvoiceAmountError(false)
-   
+
         if (customerID === "") {
             setCustomerIdError(true);
-        }
-
-        if (customerName === "") {
-            setCustomerNameError(true);
         }
 
         if (date === "") {
             setDateError(true);
         }
 
-        if (shipTo === "") {
-            setShipToError(true);
-        }
-
-        if (invoiceAmount === "") {
-            setInvoiceAmountError(true);
-        }
         // request is sent after all input are valid
-        if (customerID && customerName && date && shipTo && invoiceAmount) {
-            fetch(process.env.ORDER_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-                    refetchOrder()
-                })
+        if (customerID && date) {
+            const response = await fetch(process.env.ORDER_URL, options)
+            if (response.status == 400) {
+                let data = await response.json()
+                setErrorMessage(data.error)
+            }
+            refetchOrder()
         }
     }
     return (
@@ -91,6 +65,7 @@ const OrdersForm = () => {
                         <TextField
                             onChange={(e) => setCustomerID(e.target.value)}
                             label="Customer ID"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
@@ -100,46 +75,13 @@ const OrdersForm = () => {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setCustomerName(e.target.value)}
-                            label="Customer Name"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={customerNameError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setDate(Date(e.target.value))}
-                            label="Date"
-                            variant="outlined"
+                            id="datime-local"
+                            onChange={(e) => setDate(e.target.value)}
+                            type="datetime-local"
                             margin="normal"
                             fullWidth
                             required
                             error={dateError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setShipTo(e.target.value)}
-                            label="Ship To"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={shipToError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
-                            onChange={(e) => setInvoiceAmount(e.target.value)}
-                            label="Invoice Amount"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={invoiceAmountError}
                         />
                     </Grid>
                     <Grid item xs={12}>

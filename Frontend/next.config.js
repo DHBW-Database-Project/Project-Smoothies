@@ -11,7 +11,7 @@ const env = {
   PRODUCT_URL: "http://localhost:5001/product",
   INGREDIENT_URL: "http://localhost:5001/ingredient",
   CATEGORY_URL: "http://localhost:5001/category",
-  ORDER_URL: "http://localhost:5001/order",
+  ORDER_URL: "http://localhost:5001/orders",
   RECIPE_URL: "http://localhost:5001/recipe",
 }
 

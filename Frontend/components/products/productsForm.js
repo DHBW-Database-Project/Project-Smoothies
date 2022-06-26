@@ -8,13 +8,13 @@ const ProductsForm = () => {
     const { refetchProduct } = useContext(DataContext)
 
     const [product_name, setPName] = useState("")
-    const [quantity, setQuantity] = useState("")
     const [selling_price, setPrice] = useState("")
+    const [categoryId, setCategoryId] = useState("")
 
     // This is to check is field is empty
     // if empty => set true => make field red
     const [pnameError, setPNameError] = useState(false)
-    const [quantityError, setQuantityError] = useState(false)
+    const [categoryError, setCategoryError] = useState(false)
     const [priceError, setPriceError] = useState(false)
 
     // display error message when request fails
@@ -29,8 +29,8 @@ const ProductsForm = () => {
         },
         body: JSON.stringify({
             productName: product_name,
-            productQuantity: quantity,
-            productPrice: selling_price,
+            sellingPrice: selling_price,
+            categoryId: categoryId,
         })
     }
 
@@ -39,33 +39,31 @@ const ProductsForm = () => {
         e.preventDefault()
         setErrorMessage("")
         setPNameError(false)
-        setQuantityError(false)
         setPriceError(false)
+        setCategoryError(false)
 
 
         if (product_name === "") {
             setPNameError(true);
         }
 
-        if (quantity === "") {
-            setQuantityError(true);
-        }
-
-
         if (selling_price === "") {
             setPriceError(true);
         }
 
+        if (categoryId === "") {
+            setCategoryError(true);
+        }
+
+
         // request is sent after all input are valid
-        if (product_name && quantity && selling_price) {
-            fetch(process.env.PRODUCT_URL, options)
-                .then(data => {
-                    if (data.status == "400") {
-                        setErrorMessage(data.statusText)
-                    }
-                    // refetch table data after each request
-                    refetchProduct()
-                })
+        if (product_name && selling_price && categoryId) {
+            const response = await fetch(process.env.PRODUCT_URL, options)
+            if (response.status == 400) {
+                let data = await response.json()
+                setErrorMessage(data.error)
+            }
+            refetchProduct()
         }
     }
     return (
@@ -86,24 +84,26 @@ const ProductsForm = () => {
                     </Grid>
                     <Grid item xs={4}>
                         <TextField
-                            onChange={(e) => setQuantity(e.target.value)}
-                            label="Quantity"
-                            variant="outlined"
-                            margin="normal"
-                            fullWidth
-                            required
-                            error={quantityError}
-                        />
-                    </Grid>
-                    <Grid item xs={4}>
-                        <TextField
                             onChange={(e) => setPrice(e.target.value)}
                             label="Selling price"
+                            type="number"
                             variant="outlined"
                             margin="normal"
                             fullWidth
                             required
                             error={priceError}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            onChange={(e) => setCategoryId(e.target.value)}
+                            label="Category ID"
+                            type="number"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            required
+                            error={categoryError}
                         />
                     </Grid>
                     <Grid item xs={12}>

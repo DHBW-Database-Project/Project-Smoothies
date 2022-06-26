@@ -28,22 +28,6 @@ sql_statement = open("./db/init.sql", "r").read()
 engine.execute(sql_statement)
 
 
-# test endpoint
-class HelloWorld(Resource):
-    def get(self):
-        ingredient = engine.execute("SELECT * FROM ingredient")
-        # result = [list(row) for row in ingredient]
-        result = []
-        for row in ingredient:
-            newRow = {"id": row[0], "name": row[1], "quantity": row[2],
-                      "price": row[3], "supplierId": row[4]}
-            result.append(newRow)
-
-        return jsonify(result)
-
-api.add_resource(HelloWorld, "/")
-
-
 # SUPPLIER
 supplier_post_args = reqparse.RequestParser()
 supplier_post_args.add_argument(
@@ -61,6 +45,7 @@ supplier_delete_args = reqparse.RequestParser()
 supplier_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
 
+
 class Supplier(Resource):
     def get(self):
         suppliers = getAllSuppliers(engine)
@@ -68,13 +53,16 @@ class Supplier(Resource):
 
     def post(self):
         args = supplier_post_args.parse_args()
-        addSupplier = engine.execute("\
-            INSERT INTO supplier (supplier_name, category, street_name, zip_code, city)\
-                VALUES (%s, %s, %s, %s, %s)", (args["supplierName"], args["supplierCategory"],
-                                               args["supplierStreet"], args["supplierZipcode"],
-                                               args["supplierCity"]))
-        
-        return {"result": args}
+        try:
+            addSupplier = engine.execute("\
+                INSERT INTO supplier (supplier_name, supplier_category, street_name, zip_code, city)\
+                    VALUES (%s, %s, %s, %s, %s)", (args["supplierName"], args["supplierCategory"],
+                                                   args["supplierStreet"], args["supplierZipcode"],
+                                                   args["supplierCity"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = supplier_delete_args.parse_args()
@@ -82,10 +70,10 @@ class Supplier(Resource):
             deleteSupplier = engine.execute("\
                 DELETE FROM supplier WHERE supplier_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
 
 api.add_resource(Supplier, "/supplier")
 
@@ -103,32 +91,40 @@ ingredient_post_args.add_argument(
 ingredient_delete_args = reqparse.RequestParser()
 ingredient_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
-    
+
+
 class Ingredient(Resource):
     def get(self):
         ingredients = getAllIngredients(engine)
         return jsonify(ingredients)
+
     def post(self):
         args = ingredient_post_args.parse_args()
-        addIngredient = engine.execute(f"\
-            INSERT INTO ingredient (ingredient_name, quantity, price, supplier_id)\
-                VALUES (%s, %s, %s, %s)", (args["ingredientName"], args["ingredientQuantity"],
-                                           args["ingredientPrice"], args["supplierId"]))
-        return {"result": args}
+        try:
+            addIngredient = engine.execute(f"\
+                INSERT INTO ingredient (ingredient_name, quantity, price, supplier_id)\
+                    VALUES (%s, %s, %s, %s)", (args["ingredientName"], args["ingredientQuantity"],
+                                               args["ingredientPrice"], args["supplierId"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
+
     def delete(self):
         args = ingredient_delete_args.parse_args()
         try:
             deleteIngredient = engine.execute("\
                 DELETE FROM ingredient WHERE ingredient_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
+
 api.add_resource(Ingredient, "/ingredient")
 
 
-#Customer
+# Customer
 customer_post_args = reqparse.RequestParser()
 customer_post_args.add_argument(
     "customerFName", type=str, help="First Name is required", required=True)
@@ -145,6 +141,7 @@ customer_delete_args = reqparse.RequestParser()
 customer_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
 
+
 class Customer(Resource):
     def get(self):
         customers = getAllCustomers(engine)
@@ -152,11 +149,16 @@ class Customer(Resource):
 
     def post(self):
         args = customer_post_args.parse_args()
-        addCustomer = engine.execute("\
-            INSERT INTO customer (fname, lname, streetname, zip_code, city)\
-                VALUES (%s, %s, %s, %s, %s)", (args["customerFName"], args["customerLName"],
-                                               args["customerStreet"], args["customerZipcode"], args["customerCity"]))
-        return {"result": args}
+        try:
+            addCustomer = engine.execute("\
+                INSERT INTO customer (f_name, l_name, street_name, zip_code, city)\
+                    VALUES (%s, %s, %s, %s, %s)", (args["customerFName"], args["customerLName"],
+                                                   args["customerStreet"], args["customerZipcode"],
+                                                   args["customerCity"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = customer_delete_args.parse_args()
@@ -164,26 +166,27 @@ class Customer(Resource):
             deleteCustomer = engine.execute("\
                 DELETE FROM customer WHERE customer_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
 
 api.add_resource(Customer, "/customer")
 
-#Products
+# Products
 product_post_args = reqparse.RequestParser()
 product_post_args.add_argument(
     "productName", type=str, help="Product Name is required", required=True)
 product_post_args.add_argument(
-    "productQuantity", type=str, help="Quantity is required", required=True)
+    "sellingPrice", type=str, help="Selling Price is required", required=True)
 product_post_args.add_argument(
-    "productPrice", type=str, help="Selling Price is required", required=True)
+    "categoryId", type=str, help="categoryId is required", required=True)
 
 product_delete_args = reqparse.RequestParser()
 product_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
-   
+
+
 class Product(Resource):
     def get(self):
         products = getAllProducts(engine)
@@ -191,10 +194,15 @@ class Product(Resource):
 
     def post(self):
         args = product_post_args.parse_args()
-        addProduct = engine.execute("\
-            INSERT INTO product (product_name, quantity, selling_price)\
-                VALUES (%s, %s, %s)", (args["productName"], args["productQuantity"],args["productPrice"]))
-        return {"result": args}
+        try:
+            addProduct = engine.execute("\
+                INSERT INTO product (product_name, selling_price, category_id)\
+                    VALUES (%s, %s, %s)", (args["productName"], args["sellingPrice"],
+                                           args["categoryId"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = product_delete_args.parse_args()
@@ -202,26 +210,25 @@ class Product(Resource):
             deleteProduct = engine.execute("\
                 DELETE FROM product WHERE product_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
 
 api.add_resource(Product, "/product")
 
-#Categories
+# Categories
 category_post_args = reqparse.RequestParser()
 category_post_args.add_argument(
     "categoryName", type=str, help="Category Name is required", required=True)
 category_post_args.add_argument(
     "categoryDescription", type=str, help="Description is required", required=True)
-category_post_args.add_argument(
-    "productId", type=str, help="Product ID is required", required=True)
 
 category_delete_args = reqparse.RequestParser()
 category_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
-   
+
+
 class Category(Resource):
     def get(self):
         categories = getAllCategories(engine)
@@ -229,10 +236,14 @@ class Category(Resource):
 
     def post(self):
         args = category_post_args.parse_args()
-        addCategory = engine.execute("\
-            INSERT INTO category (category_name, description, product_id)\
-                VALUES (%s, %s, %s)", (args["categoryName"], args["categoryDescription"], args["productId"]))
-        return {"result": args}
+        try:
+            addCategory = engine.execute("\
+                INSERT INTO category (category_name, category_description)\
+                    VALUES (%s, %s)", (args["categoryName"], args["categoryDescription"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = category_delete_args.parse_args()
@@ -240,57 +251,55 @@ class Category(Resource):
             deleteCategory = engine.execute("\
                 DELETE FROM category WHERE category_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
 
 api.add_resource(Category, "/category")
 
-#Orders 
+# Orders
 order_post_args = reqparse.RequestParser()
 order_post_args.add_argument(
     "customerId", type=str, help="Customer ID is required", required=True)
 order_post_args.add_argument(
-    "customerName", type=str, help="Customer Name is required", required=True)
-order_post_args.add_argument(
     "orderDate", type=str, help="Order Date is required", required=True)
-order_post_args.add_argument(
-    "shipTo", type=str, help="Ship To is required", required=True)
-order_post_args.add_argument(
-    "invoiceAmount", type=str, help="Invoice Amount is required", required=True)
 
 order_delete_args = reqparse.RequestParser()
 order_delete_args.add_argument(
     "rowId", type=int, help="Row ID is required", required=True)
 
-class Order(Resource):
+
+class Orders(Resource):
     def get(self):
         orders = getAllOrders(engine)
         return jsonify(orders)
 
     def post(self):
         args = order_post_args.parse_args()
-        addOrder = engine.execute("\
-            INSERT INTO orders (customer_id, customer_name, order_date, ship_to, invoice_amount)\
-                VALUES (%s, %s, %s, %s, %s)", (args["customerId"], args["customerName"],
-                        args["orderDate"], args["shipTo"],args["invoiceAmount"]))
-        return {"result": args}
+        try:
+            addOrder = engine.execute("\
+                INSERT INTO orders (customer_id, orders_date)\
+                    VALUES (%s, %s)", (args["customerId"], args["orderDate"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = order_delete_args.parse_args()
         try:
             deleteOrder = engine.execute("\
-                DELETE FROM orders WHERE order_id = %s;", (args["rowId"]))
+                DELETE FROM orders WHERE orders_id = %s;", (args["rowId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
 
-api.add_resource(Order, "/order")
 
-#Recipe
+api.add_resource(Orders, "/orders")
+
+# Recipe
 recipe_post_args = reqparse.RequestParser()
 recipe_post_args.add_argument(
     "productId", type=str, help="Product ID is required", required=True)
@@ -302,7 +311,10 @@ recipe_post_args.add_argument(
 
 recipe_delete_args = reqparse.RequestParser()
 recipe_delete_args.add_argument(
-    "rowId", type=int, help="Row ID is required", required=True)
+    "productId", type=int, help="Product ID is required", required=True)
+recipe_delete_args.add_argument(
+    "ingredientId", type=int, help="Ingredient ID is required", required=True)
+
 
 class Recipe(Resource):
     def get(self):
@@ -311,10 +323,15 @@ class Recipe(Resource):
 
     def post(self):
         args = recipe_post_args.parse_args()
-        addRecipe = engine.execute("\
-            INSERT INTO recipe (product_id, ingredient_id, quantity)\
-                VALUES (%s, %s, %s)", (args["productId"], args["ingredientId"], args["quantity"]))
-        return {"result": args}
+        try:
+            addRecipe = engine.execute("\
+                INSERT INTO recipe (product_id, ingredient_id, quantity)\
+                    VALUES (%s, %s, %s)", (args["productId"], args["ingredientId"],
+                                           args["quantity"]))
+        except SQLAlchemyError as e:
+            return {"error": str(e)}, 400
+
+        return 200
 
     def delete(self):
         args = recipe_delete_args.parse_args()
@@ -322,10 +339,10 @@ class Recipe(Resource):
             deleteRecipe = engine.execute("\
                 DELETE FROM recipe WHERE product_id = %s AND ingredient_id = %s;", (args["productId"], args["ingredientId"]))
         except SQLAlchemyError as e:
-            errorMessage = str(e.__dict__["orig"])
-            abort(400, errorMessage)
-            
+            return {"error": str(e)}, 400
+
         return 200
+
 
 api.add_resource(Recipe, "/recipe")
 
