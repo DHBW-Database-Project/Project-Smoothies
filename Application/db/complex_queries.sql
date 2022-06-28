@@ -40,7 +40,7 @@ FROM
 	ingredient AS i
 	LEFT JOIN supplier AS s ON (i.supplier_id = s.supplier_id)
     
---4. Show the accumulated revenue of every product
+--4. Show the accumulated revenue of every product and 
 SELECT 	
 	p.product_id AS product_id,
 	p.product_name AS product,
@@ -53,7 +53,7 @@ FROM
 GROUP BY 
 	p.product_id
 ORDER BY 
-	p.product_id ASC;
+	product_revenue ASC;
 
 -- 5. List of the products, which contain ingredient_id = 5 or 6
 SELECT 	
@@ -70,24 +70,29 @@ WHERE
 	d.ingredient_id = '5' 
 	OR d.ingredient_id = '6'
 
---6. Lists all orders made in the last seven days of January
-SELECT *
-FROM orders
+--6. Lists sum of products each order made in the last seven days of January
+SELECT 
+	d.orders_id,
+ 	SUM(d.quantity) AS quantity_of_products
+FROM 
+	orders AS o
+	JOIN order_details AS d ON (o.orders_id = d.orders_id)
 WHERE 
-	orders_date BETWEEN DATE '2022-01-01'
+	orders_date BETWEEN DATE '2022-01-25'
 	AND DATE '2022-01-31'
-EXCEPT
-SELECT *
-FROM orders
-WHERE 
-	orders_date <= DATE '2022-01-25';
+GROUP BY
+ 	d.orders_id;
 
 
--- 7. Set Operation (Union): Descending list of all the cities, from which the customer and suppliers come 
-SELECT DISTINCT city
-FROM customer
-UNION 
-SELECT DISTINCT city
-FROM supplier
+-- 7. List all the product and give zero by products, which weren't sold. Also quantity of sold product will be listed descending
+SELECT 
+	p.product_id,
+	p.product_name,
+	COALESCE(SUM(d.quantity), 0) AS quantity_sold_product
+FROM 
+	order_details AS d
+	RIGHT JOIN product AS p ON (d.product_id = p.product_id)
+GROUP BY 
+	p.product_id
 ORDER BY 
-	city DESC
+	quantity_sold_product DESC;
