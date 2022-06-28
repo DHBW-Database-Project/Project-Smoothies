@@ -73,7 +73,7 @@ WHERE
 --6. Lists sum of products each order made in the last seven days of January
 SELECT 
 	d.orders_id,
- 	SUM(d.quantity) AS quantity_of_products
+ 	COUNT(d.product_id) AS products
 FROM 
 	orders AS o
 	JOIN order_details AS d ON (o.orders_id = d.orders_id)
@@ -82,7 +82,6 @@ WHERE
 	AND DATE '2022-01-31'
 GROUP BY
  	d.orders_id;
-
 
 -- 7. List all the product and give zero by products, which weren't sold. Also quantity of sold product will be listed descending
 SELECT 
