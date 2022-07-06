@@ -18,6 +18,21 @@ to shutdown application:
 doocker-compose down
 ```
 
+## Navigation
+### Backend
+- <strong>Queries</strong> can be found in [/Application/db/complex_queries.sql](/Application/db/complex_queries.sql)
+- <strong>Views, Procedures, SQL-statements</strong> can be found in [/Application/db/init.sql](/Application/db/init.sql)
+-  <strong>API-endpoints (GET, POST, DELETE)</strong> can be found in [/Application/app.py](/Application/app.py)
+
+### Frontend
+- <strong>Pages</strong> can be found in [/Frontend/pages/](/Frontend/pages/)
+- <strong>Components </strong> like delete button can be found in [/Frontend/components/](/Frontend/components/)
+- <strong>Configs</strong> like URLs for request can be found in [/Frontend/next.config.js](/Frontend/next.config.js)
+- <strong>Contexts</strong> to manage application state can be found in [/Frontend/contexts/](/Frontend/contexts/)
+
+### Documentation
+- documentation can be be found in [/Docs/](/Docs/)
+
 ## Steps to setup development environment
 Install and create virtualenv
 ```
