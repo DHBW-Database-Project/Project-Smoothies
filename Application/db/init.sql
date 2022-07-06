@@ -164,15 +164,15 @@ FROM
     JOIN category AS d ON (a.category_id=d.category_id);
 
 
--- We need a new matetrialized view to show the total sum of the orders
--- CREATE MATERIALIZED VIEW sum_customer_orders AS
--- SELECT
---     distinct b.customer_id,
---     b.fname,
---     b.lname,
---     sum(a.invoice_amount) as total_amount
--- FROM
---     orders a
---     JOIN customer b ON a.customer_id= b.customer_id
--- GROUP BY b.customer_id
--- ORDER BY total_amount DESC;
+CREATE MATERIALIZED VIEW sum_customer_orders AS
+SELECT
+    distinct b.customer_id,
+    b.f_name,
+    b.l_name,
+    sum(d.selling_price)
+FROM
+    orders a
+    JOIN customer b ON a.customer_id = b.customer_id
+    JOIN order_details c ON c.orders_id = a.orders_id
+    JOIN product d ON c.product_id=d.product_id
+GROUP BY b.customer_id;
