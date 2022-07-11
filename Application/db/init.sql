@@ -1,4 +1,5 @@
 DROP VIEW IF EXISTS product_overview;
+DROP VIEW IF EXISTS enough_ingredients;
 DROP MATERIALIZED VIEW IF EXISTS sum_customer_orders;
 DROP TABLE IF EXISTS supplier CASCADE;
 DROP TABLE IF EXISTS ingredient CASCADE;
@@ -176,3 +177,61 @@ FROM
     JOIN order_details c ON c.orders_id = a.orders_id
     JOIN product d ON c.product_id=d.product_id
 GROUP BY b.customer_id;
+
+/*
+order_quantity the number of orders of a product (exp. 2x Botox and 3x Mango Smoothie)
+ingredients_quanity the number of ingredients required to create the product
+total_required_quantity is the sum of ingredients needed to fulfill the order
+available_quantity is the number of ingredients available in the warehouse
+*/
+CREATE VIEW enough_ingredients AS
+SELECT
+    a.orders_id,
+    a.product_id,
+    a.quantity AS order_quantity,
+    b.quantity AS ingredients_quantity,
+    sum(a.quantity * b.quantity) AS total_required_quantity,
+    c.quantity AS available_quantity
+FROM
+    order_details AS a
+    JOIN recipe AS b ON (a.product_id=b.product_id)
+    JOIN ingredient AS c ON (b.ingredient_id=c.ingredient_id)
+GROUP BY 
+    a.orders_id,
+    a.product_id,
+    a.quantity,
+    b.quantity,
+    c.quantity
+ORDER BY
+    a.orders_id;
+
+/*
+PROCEDURE:
+This function is triggered when a new order is created. It checks if there are
+enough ingredients in the stock. If not, it will return an error. If there are enough
+ingredients, the order is created and the ingredients are removed from the stock.
+*/
+CREATE OR REPLACE PROCEDURE ingredient_quantity_product(orders_id NUMERIC)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    IF (
+        SELECT SUM(total_required_quantity) FROM enough_ingredients
+        WHERE orders_id = orders_id) > (SELECT SUM(quantity) FROM ingredient) 
+        THEN
+            RAISE EXCEPTION 'Not enough ingredients in the warehouse';
+    ELSE
+        UPDATE ingredient SET quantity = quantity - total_required_quantity
+            WHERE ingredient_id IN (SELECT ingredient_id FROM enough_ingredients WHERE orders_id = orders_id);
+        INSERT INTO order_details (orders_id, product_id, quantity)
+            SELECT orders_id, product_id, quantity
+            FROM enough_ingredients
+            WHERE orders_id = orders_id;
+    END IF;
+END;
+$$;
+
+
+CREATE TRIGGER enough_ingredients
+    AFTER UPDATE ON order_details
+    EXECUTE PROCEDURE ingredient_quantity_product(orders_id);
