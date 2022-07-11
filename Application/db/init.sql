@@ -167,7 +167,7 @@ FROM
 
 CREATE MATERIALIZED VIEW sum_customer_orders AS
 SELECT
-    distinct b.customer_id,
+    DISTINCT b.customer_id,
     b.f_name,
     b.l_name,
     sum(d.selling_price)
