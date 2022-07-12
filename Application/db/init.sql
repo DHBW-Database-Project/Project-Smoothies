@@ -82,6 +82,8 @@ CREATE TABLE order_details (
     FOREIGN KEY(orders_id) REFERENCES orders(orders_id) ON DELETE CASCADE
 );
 
+-- secondary index for product_index
+CREATE UNIQUE INDEX product_index ON product (product_name);
 
 INSERT INTO supplier (supplier_name, supplier_category, street_name, zip_code, city)
     VALUES
@@ -211,7 +213,7 @@ This function is triggered when a new order is created. It checks if there are
 enough ingredients in the stock. If not, it will return an error. If there are enough
 ingredients, the order is created and the ingredients are removed from the stock.
 */
-CREATE OR REPLACE PROCEDURE ingredient_quantity_product(orders_id NUMERIC)
+CREATE OR REPLACE PROCEDURE ingredient_quantity_product (orders_id NUMERIC)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -230,8 +232,3 @@ BEGIN
     END IF;
 END;
 $$;
-
-
-CREATE TRIGGER enough_ingredients
-    AFTER UPDATE ON order_details
-    EXECUTE PROCEDURE ingredient_quantity_product(orders_id);
