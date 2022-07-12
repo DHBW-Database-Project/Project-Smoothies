@@ -232,3 +232,9 @@ BEGIN
     END IF;
 END;
 $$;
+
+/*
+CREATE TRIGGER enough_ingredients
+    BERFORE INSERT ON order_details
+    EXECUTE PROCEDURE ingredient_quantity_product(orders_id); 
+*/
